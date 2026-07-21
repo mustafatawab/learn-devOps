@@ -1,0 +1,88 @@
+name : your_name
+
+services:
+
+  migrate:
+    image: taskflow-backend-image:latest
+    command: sh -c "npx prisma db push --force-reset && npx prisma db seed && npx prisma generate"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend:
+    build: 
+      context: "./backend-nodejs"
+      dockerfile: Dockerfile
+    image: taskflow-backend-image:latest
+    container_name: taskflow-backend-container
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./backend-nodejs:/app
+      - /app/node_modules
+    env_file:
+      - ./backend-nodejs/.env
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@db:5432/postgres
+      - DIRECT_URL=postgresql://postgres:1234@db:5432/postgres
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+    
+  frontend:
+    build:
+      context: "./frontend"
+      dockerfile: Dockerfile
+    image: taskflow-frontend-image:latest
+    container_name: taskflow-frontend-container
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    env_file:
+      - ./frontend/.env
+    environment:
+      - API_URL=http://backend:9000
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - app-network
+    
+
+  db:
+    image: postgres:16-alpine
+    container_name: taskflow_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL" , "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+    
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

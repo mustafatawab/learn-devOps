@@ -175,6 +175,8 @@ Creates a new image from a container's current state.
 docker commit my-container my-snapshot:v1
 ```
 
+
+
 ---
 
 ## Testing & Debugging
