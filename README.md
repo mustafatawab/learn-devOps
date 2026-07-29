@@ -1,17 +1,20 @@
 # 🚀 Learn DevOps
 
-A hands-on DevOps learning journey — from Docker fundamentals to Kubernetes, CI/CD pipelines, and Cloud platforms. Every concept is learned by building real projects.
+A hands-on DevOps learning journey — from Linux fundamentals to Kubernetes, CI/CD pipelines, and Cloud platforms. Every concept is learned by building real projects.
+
 
 ---
 
 ## 🗺️ Roadmap
 
 ```
-Phase 1 → Docker          ✅ Complete
-Phase 2 → CI/CD Pipeline  ✅ Complete
-Phase 3 → Networking      ✅ Complete
-Phase 4 → Kubernetes      🔄 In Progress
-Phase 5 → Cloud Platform  ⬜ Upcoming
+01 → Linux Fundamentals   ✅ Complete
+02 → Networking & NGINX   ✅ Complete
+03 → Git & GitHub         ✅ Complete
+04 → Containerization     ✅ Complete
+05 → CI/CD Pipeline       ✅ Complete
+06 → Kubernetes           🔄 In Progress
+07 → Cloud Platform       ⬜ Upcoming
 ```
 
 ---
@@ -20,48 +23,202 @@ Phase 5 → Cloud Platform  ⬜ Upcoming
 
 ```
 learn-devOps/
-├── 01-containerization/
+├── 01-linux/
+│   └── Linux.md                     # Linux fundamentals, commands, permissions
+├── 02-networking/
+│   ├── reverse_proxy.md             # NGINX concepts, SSL, load balancing
+│   └── nginx_setup.md               # Step-by-step NGINX setup guide
+├── 03-git/
+│   ├── README.md                    # Git learning path overview
+│   ├── 3.1-git_basics.md            # What Git is, setup, daily workflow
+│   ├── 3.2-git_branching.md         # Branches, merge, rebase, conflicts
+│   ├── 3.3-github.md                # Remotes, PRs, Issues, team workflow
+│   └── 3.4-git_advanced.md          # Undo/recover, stash, tags, pro habits
+├── 04-containerization/
 │   ├── docker_containerization.md   # Docker concepts, Dockerfile, multi-stage builds
 │   └── docker_compose.md            # Docker Compose deep dive
-├── 02-networking/
-│   └── reverse_proxy.md             # NGINX reverse proxy, SSL, load balancing
-├── 03-ci-cd/
+├── 05-ci-cd/
 │   ├── cicd_pipelines.md            # GitHub Actions CI/CD concepts
-│   ├── README.md            # GitHub Actions CI/CD concepts
 │   └── templates/                   # Ready-made pipeline templates
 │       ├── nextjs/
 │       ├── nextjs-node/
 │       ├── nextjs-fastapi/
 │       ├── fastapi/
 │       └── laravel/
-├── 04-kubernetes/                   # Kubernetes notes (in progress)
-├── 05-cloud/                        # Cloud platform notes (upcoming)
-├── app/                             # Practice application
-└── Linux.md                         # Linux fundamentals
+├── 06-kubernetes/                   # Kubernetes notes (in progress)
+├── examples/                        # Practice applications
+└── README.md
 ```
 
 ---
 
-## Phase 1 — Docker 🐳
+## 01 — Linux Fundamentals 🐧
+
+> **Goal:** Get comfortable with Linux — the operating system every server runs on.
+
+### What I Learned
+
+- `apt` — Ubuntu's package manager (like `brew` on Mac)
+- `sudo` — run commands as administrator
+- Environment variables — `$USER`, `$HOME`, `$PATH`
+- File permissions — `chmod`, `chown`
+- `curl` + pipe (`|`) — download and execute scripts
+- SSH setup — key pairs, `authorized_keys`, `~/.ssh/config`
+- Process management — `ps`, `kill`, `systemctl`
+- Disk usage — `df -h`, `du -sh`
+
+### Notes
+
+| File | Description |
+|------|-------------|
+| [Linux.md](./01-linux/Linux.md) | Essential Linux commands and concepts for DevOps |
+
+### Key Commands
+
+```bash
+# Package management
+sudo apt update && sudo apt install <package>
+
+# User & permissions
+sudo usermod -aG docker $USER    # add user to group
+newgrp docker                    # apply group change
+chmod 700 ~/.ssh                 # secure SSH folder
+chmod 600 ~/.ssh/authorized_keys # secure authorized keys
+
+# Disk usage
+df -h                            # check disk space
+docker system prune -a -f        # free Docker space
+
+# Download and execute
+curl -LsSf https://example.com/install.sh | sh
+```
+
+---
+
+## 02 — Networking & NGINX 🌐
+
+> **Goal:** Understand how traffic flows from the internet to your app and set up NGINX as a reverse proxy.
+
+### What I Learned
+
+- **SSH** — connect to remote servers securely using key pairs
+- **SSH config** — `~/.ssh/config` shortcuts for quick access
+- **Multipass** — run Ubuntu VMs locally to simulate a real VPS
+- **Reverse proxy** — what it is, why it exists, how it works
+- **Forward proxy vs reverse proxy** — the key difference
+- **NGINX** — install, configure, enable sites, test config, reload
+- **`sites-available` vs `sites-enabled`** — symlink pattern
+- **NGINX in Docker** — running NGINX as a container in Docker Compose
+- **NGINX config** — `proxy_pass`, headers, domain-based vs path-based routing
+- **Load balancing** — upstream blocks, round-robin
+- **SSL/HTTPS** — Let's Encrypt + Certbot
+
+### Notes
+
+| File | Description |
+|------|-------------|
+| [reverse_proxy.md](./02-networking/reverse_proxy.md) | NGINX concepts, SSL, load balancing, troubleshooting |
+| [nginx_setup.md](./02-networking/nginx_setup.md) | Step-by-step setup — bare metal and Docker Compose |
+
+### Key Concepts
+
+**SSH key pair:**
+```
+Private key → stays on YOUR machine (never share!)
+Public key  → goes on the SERVER (~/.ssh/authorized_keys)
+```
+
+**SSH config shortcut:**
+```
+# ~/.ssh/config
+Host devops-vm
+    HostName 192.168.252.11
+    User ubuntu
+    IdentityFile ~/.ssh/id_ed25519
+
+ssh devops-vm   # ← now just this!
+```
+
+**NGINX proxy_pass — bare metal vs Docker:**
+```nginx
+proxy_pass http://localhost:3000;   # ✅ bare metal NGINX
+proxy_pass http://portfolio:3000;   # ✅ Docker Compose (service name!)
+```
+
+**Never build on the server — pull instead:**
+```bash
+docker compose pull
+docker compose up -d
+docker image prune -f
+```
+
+---
+
+## 03 — Git & GitHub 🌿
+
+> **Goal:** Master version control for safe collaboration and CI/CD that starts from Git events.
+
+### What I Learned
+
+- **Git basics** — init, add, commit, status, log
+- **Branching** — create, switch, merge, rebase
+- **GitHub** — remotes, push, pull, PRs, Issues
+- **Conflict resolution** — merge conflicts and how to fix them
+- **Advanced Git** — stash, tags, cherry-pick, reset, revert
+- **Git workflow** — feature branch → PR → review → merge to main
+- **Why Git matters for DevOps** — every CI/CD pipeline starts from a Git event
+
+### Notes
+
+| File | Description |
+|------|-------------|
+| [3.1-git_basics.md](./03-git/3.1-git_basics.md) | What Git is, setup, daily commit workflow |
+| [3.2-git_branching.md](./03-git/3.2-git_branching.md) | Branches, merge, rebase, conflicts |
+| [3.3-github.md](./03-git/3.3-github.md) | Remotes, PRs, Issues, team workflow |
+| [3.4-git_advanced.md](./03-git/3.4-git_advanced.md) | Undo/recover, stash, tags, pro DevOps habits |
+
+### Key Concepts
+
+**Why Git matters in DevOps:**
+```
+Code change → Git commit → Push → GitHub
+                              ↓
+                     CI/CD pipeline triggers
+                              ↓
+                     Build → Test → Deploy
+```
+
+**Git mental model:**
+| Concept | Simple meaning |
+|---------|----------------|
+| Commit | A saved snapshot of your project |
+| Branch | A parallel line of work |
+| Remote | A copy of the repo on GitHub |
+| PR | Ask to merge your branch (with review) |
+
+---
+
+## 04 — Containerization 🐳
 
 > **Goal:** Understand containerization deeply and write production-ready Dockerfiles.
 
 ### What I Learned
 
-- **Linux fundamentals** — `apt`, `sudo`, environment variables (`$USER`, `$HOME`, `$PATH`), `curl`, pipe (`|`)
 - **Docker architecture** — daemon, socket, images, containers, layers, Docker Hub
 - **Image layer caching** — order Dockerfile instructions from least-changing to most-changing
 - **Multi-stage builds** — separate build stage from production stage to minimize image size
 - **Docker networks** — containers communicate using service/container names as hostnames
 - **Docker volumes** — named volumes for persistence, bind mounts for dev hot-reload
 - **Docker Compose** — orchestrate multi-container apps with a single `compose.yaml`
+- **depends_on** — `service_started`, `service_healthy`, `service_completed_successfully`
+- **Restart policies** — `no`, `always`, `unless-stopped`, `on-failure`
 
 ### Notes
 
 | File | Description |
 |------|-------------|
-| [docker_containerization.md](./01-containerization/docker_containerization.md) | Docker concepts, Dockerfile reference, multi-stage builds, volumes, networks, commands |
-| [docker_compose.md](./01-containerization/docker_compose.md) | Compose services, networks, volumes, depends_on, healthchecks, restart policies |
+| [docker_containerization.md](./04-containerization/docker_containerization.md) | Docker concepts, Dockerfile reference, multi-stage builds, volumes, networks, commands |
+| [docker_compose.md](./04-containerization/docker_compose.md) | Compose services, networks, volumes, depends_on, healthchecks, restart policies |
 
 ### Key Concepts
 
@@ -84,14 +241,6 @@ RUN npm install --omit=dev
 CMD ["node", "dist/server.js"]
 ```
 
-**Container networking:**
-```
-# Containers on the same network talk via service name
-DATABASE_URL=postgresql://user:pass@db:5432/mydb
-#                                    ↑
-#                              service name = hostname
-```
-
 **Layer caching strategy:**
 ```dockerfile
 COPY package*.json ./    # ← copy this first (changes rarely)
@@ -99,9 +248,16 @@ RUN npm install          # ← cached unless package.json changes
 COPY . .                 # ← copy code last (changes often)
 ```
 
+**Container networking:**
+```
+DATABASE_URL=postgresql://user:pass@db:5432/mydb
+#                                    ↑
+#                              service name = hostname
+```
+
 ---
 
-## Phase 2 — CI/CD Pipeline ⚙️
+## 05 — CI/CD Pipeline ⚙️
 
 > **Goal:** Automate build → test → deploy on every push using GitHub Actions.
 
@@ -121,24 +277,24 @@ COPY . .                 # ← copy code last (changes often)
 
 | File | Description |
 |------|-------------|
-| [cicd_pipelines.md](./03-ci-cd/cicd_pipelines.md) | Full CI/CD guide with concepts, triggers, secrets, caching |
+| [cicd_pipelines.md](./05-ci-cd/cicd_pipelines.md) | Full CI/CD guide with concepts, triggers, secrets, caching |
 
 ### Templates
 
 | Stack | CI | CD |
 |-------|----|----|
-| Next.js | [ci.yml](./03-ci-cd/templates/nextjs/ci.yml) | [cd.yml](./03-ci-cd/templates/nextjs/cd.yml) |
-| Next.js + Node.js | [ci.yml](./03-ci-cd/templates/nextjs-node/ci.yml) | [cd.yml](./03-ci-cd/templates/nextjs-node/cd.yml) |
-| Next.js + FastAPI | [ci.yml](./03-ci-cd/templates/nextjs-fastapi/ci.yml) | [cd.yml](./03-ci-cd/templates/nextjs-fastapi/cd.yml) |
-| FastAPI | [ci.yml](./03-ci-cd/templates/fastapi/ci.yml) | [cd.yml](./03-ci-cd/templates/fastapi/cd.yml) |
-| Laravel | [ci.yml](./03-ci-cd/templates/laravel/ci.yml) | [cd.yml](./03-ci-cd/templates/laravel/cd.yml) |
+| Next.js | [ci.yml](./05-ci-cd/templates/nextjs/ci.yml) | [cd.yml](./05-ci-cd/templates/nextjs/cd.yml) |
+| Next.js + Node.js | [ci.yml](./05-ci-cd/templates/nextjs-node/ci.yml) | [cd.yml](./05-ci-cd/templates/nextjs-node/cd.yml) |
+| Next.js + FastAPI | [ci.yml](./05-ci-cd/templates/nextjs-fastapi/ci.yml) | [cd.yml](./05-ci-cd/templates/nextjs-fastapi/cd.yml) |
+| FastAPI | [ci.yml](./05-ci-cd/templates/fastapi/ci.yml) | [cd.yml](./05-ci-cd/templates/fastapi/cd.yml) |
+| Laravel | [ci.yml](./05-ci-cd/templates/laravel/ci.yml) | [cd.yml](./05-ci-cd/templates/laravel/cd.yml) |
 
 ### Key Concepts
 
 **Two-workflow pattern:**
 ```
-PR opened       → ci.yml  → test + build only
-PR merged       → cd.yml  → build image → push GHCR → deploy via SSH
+PR opened  → ci.yml → test + build only
+PR merged  → cd.yml → build image → push GHCR → deploy via SSH
 ```
 
 **Job dependency chain:**
@@ -156,79 +312,7 @@ fails?    never runs    never runs
 
 ---
 
-## Phase 3 — Networking 🌐
-
-> **Goal:** Understand how traffic flows from the internet to your app and set up NGINX as a reverse proxy.
-
-### What I Learned
-
-- **SSH** — how to connect to remote servers securely using key pairs
-- **SSH key setup** — generating keys, `authorized_keys`, `~/.ssh/config` shortcuts
-- **Multipass** — running Ubuntu VMs locally to simulate a real VPS
-- **Manual deployment** — git clone → docker build → docker run on a server
-- **Reverse proxy** — what it is, why it exists, how it works
-- **NGINX** — install, configure, enable sites, test config, reload
-- **`sites-available` vs `sites-enabled`** — symlink pattern
-- **NGINX in Docker** — running NGINX as a container in Docker Compose
-- **NGINX config** — `proxy_pass`, headers, domain-based routing, path-based routing
-- **Load balancing** — upstream blocks, round-robin
-- **SSL/HTTPS** — Let's Encrypt + Certbot
-
-### Notes
-
-| File | Description |
-|------|-------------|
-| [reverse_proxy.md](./02-networking/reverse_proxy.md) | Complete NGINX reverse proxy guide with configs, SSL, load balancing |
-
-### Key Concepts
-
-**SSH key pair:**
-```
-Private key → stays on YOUR machine (never share!)
-Public key  → goes on the SERVER (~/.ssh/authorized_keys)
-```
-
-**SSH config shortcut:**
-```
-# ~/.ssh/config
-Host devops-vm
-    HostName 192.168.252.11
-    User ubuntu
-    IdentityFile ~/.ssh/id_ed25519
-
-# Now just type:
-ssh devops-vm
-```
-
-**NGINX as reverse proxy:**
-```
-User visits http://your-server-ip
-        ↓
-NGINX listens on port 80
-        ↓
-Forwards to localhost:3000 (or portfolio:3000 in Docker)
-        ↓
-App responds → NGINX sends back to user
-```
-
-**NGINX in Docker Compose:**
-```yaml
-# proxy_pass uses SERVICE NAME not localhost!
-proxy_pass http://portfolio:3000;  # ✅ Docker Compose
-proxy_pass http://localhost:3000;  # ✅ Bare metal NGINX
-```
-
-**Never build on the server — pull instead:**
-```bash
-# ✅ Correct production deployment
-docker compose pull
-docker compose up -d
-docker image prune -f
-```
-
----
-
-## Phase 4 — Kubernetes ☸️
+## 06 — Kubernetes ☸️
 
 > **Goal:** Deploy and manage containerized apps at scale with self-healing and rolling updates.
 
@@ -267,7 +351,7 @@ Docker Desktop K8s (local) → minikube → managed K8s (GKE/EKS)
 
 ---
 
-## Phase 5 — Cloud Platform ☁️
+## 07 — Cloud Platform ☁️
 
 > **Goal:** Deploy the full stack to a real cloud provider with IaC and observability.
 
@@ -276,39 +360,8 @@ Docker Desktop K8s (local) → minikube → managed K8s (GKE/EKS)
 - [ ] Cloud provider fundamentals (GCP / AWS)
 - [ ] Managed Kubernetes — GKE or EKS
 - [ ] Infrastructure as Code — Terraform
-- [ ] Observability — CloudWatch / Cloud Logging, Prometheus, Grafana
+- [ ] Observability — CloudWatch / Cloud Logging, Prometheus, Grafana, Sentry
 - [ ] Full end-to-end: CI/CD pipeline → Docker image → Kubernetes on cloud
-
----
-
-## 🐧 Linux Fundamentals
-
-> Linux knowledge required for DevOps work.
-
-| File | Description |
-|------|-------------|
-| [Linux.md](./Linux.md) | Essential Linux commands and concepts for DevOps |
-
-### Key Commands
-
-```bash
-# Package management
-sudo apt update && sudo apt install <package>
-
-# User & permissions
-sudo usermod -aG docker $USER    # add user to group
-newgrp docker                    # apply group change
-chmod 700 ~/.ssh                 # secure SSH folder
-chmod 600 ~/.ssh/authorized_keys # secure authorized keys
-
-# Disk usage
-df -h                            # check disk space
-docker system prune -a -f        # free Docker space
-
-# Networking
-curl -LsSf https://example.com/install.sh | sh   # download and execute
-curl -I http://localhost:3000                      # check if app is running
-```
 
 ---
 
@@ -316,6 +369,8 @@ curl -I http://localhost:3000                      # check if app is running
 
 | Category | Tool |
 |----------|------|
+| OS / Server | Linux (Ubuntu) |
+| Version Control | Git, GitHub |
 | Containerization | Docker, Docker Compose |
 | Reverse Proxy | NGINX |
 | CI/CD | GitHub Actions |
@@ -363,6 +418,12 @@ NGINX listens on 80/443. App port (3000) stays internal — only NGINX talks to 
 **10. `node dist/server.js` over `npm start` in production**
 Direct `node` = proper signal handling. With `npm start`, Docker's `SIGTERM` can get lost.
 
+**11. Every CI/CD pipeline starts from a Git event**
+`push`, `pull_request`, `tag` — mastering Git branching directly affects your deployment workflow.
+
+**12. Test twice — once on PR, once after merge**
+PR branch passes CI ≠ merged code passes CI. Always test the merged result too.
+
 ---
 
 ## 📚 Resources
@@ -372,6 +433,7 @@ Direct `node` = proper signal handling. With `npm start`, Docker's `SIGTERM` can
 - [GitHub Actions Docs](https://docs.github.com/en/actions)
 - [NGINX Docs](https://nginx.org/en/docs/)
 - [Certbot (Let's Encrypt)](https://certbot.eff.org/)
+- [Git Official Docs](https://git-scm.com/doc)
 - [Kubernetes Official Docs](https://kubernetes.io/docs/)
 - [Helm Docs](https://helm.sh/docs/)
 - [Terraform Docs](https://developer.hashicorp.com/terraform/docs)
