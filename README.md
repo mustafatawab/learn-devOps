@@ -2,16 +2,16 @@
 
 A hands-on DevOps learning journey — from Docker fundamentals to Kubernetes, CI/CD pipelines, and Cloud platforms. Every concept is learned by building real projects.
 
-
 ---
 
 ## 🗺️ Roadmap
 
 ```
 Phase 1 → Docker          ✅ Complete
-Phase 2 → CI/CD Pipeline  🔄 In Progress
-Phase 3 → Kubernetes      ⬜ Upcoming
-Phase 4 → Cloud Platform  ⬜ Upcoming
+Phase 2 → CI/CD Pipeline  ✅ Complete
+Phase 3 → Networking      ✅ Complete
+Phase 4 → Kubernetes      🔄 In Progress
+Phase 5 → Cloud Platform  ⬜ Upcoming
 ```
 
 ---
@@ -20,14 +20,23 @@ Phase 4 → Cloud Platform  ⬜ Upcoming
 
 ```
 learn-devOps/
-├── containerization/
+├── 01-containerization/
 │   ├── docker_containerization.md   # Docker concepts, Dockerfile, multi-stage builds
 │   └── docker_compose.md            # Docker Compose deep dive
-├── kubernetes/                      # Kubernetes notes (upcoming)
-├── ci-cd/                           # GitHub Actions pipelines (upcoming)
-├── cloud/                           # Cloud platform notes (upcoming)
+├── 02-networking/
+│   └── reverse_proxy.md             # NGINX reverse proxy, SSL, load balancing
+├── 03-ci-cd/
+│   ├── cicd_pipelines.md            # GitHub Actions CI/CD concepts
+│   ├── README.md            # GitHub Actions CI/CD concepts
+│   └── templates/                   # Ready-made pipeline templates
+│       ├── nextjs/
+│       ├── nextjs-node/
+│       ├── nextjs-fastapi/
+│       ├── fastapi/
+│       └── laravel/
+├── 04-kubernetes/                   # Kubernetes notes (in progress)
+├── 05-cloud/                        # Cloud platform notes (upcoming)
 ├── app/                             # Practice application
-├── fastapi-docker/                  # FastAPI + Docker example
 └── Linux.md                         # Linux fundamentals
 ```
 
@@ -39,7 +48,7 @@ learn-devOps/
 
 ### What I Learned
 
-- **Linux fundamentals** for DevOps — `apt`, `sudo`, environment variables (`$USER`, `$HOME`, `$PATH`), `curl`, pipe (`|`)
+- **Linux fundamentals** — `apt`, `sudo`, environment variables (`$USER`, `$HOME`, `$PATH`), `curl`, pipe (`|`)
 - **Docker architecture** — daemon, socket, images, containers, layers, Docker Hub
 - **Image layer caching** — order Dockerfile instructions from least-changing to most-changing
 - **Multi-stage builds** — separate build stage from production stage to minimize image size
@@ -51,8 +60,8 @@ learn-devOps/
 
 | File | Description |
 |------|-------------|
-| [docker_containerization.md](./containerization/docker_containerization.md) | Docker concepts, Dockerfile reference, multi-stage builds, volumes, networks, commands |
-| [docker_compose.md](./containerization/docker_compose.md) | Compose services, networks, volumes, depends_on, healthchecks, restart policies |
+| [docker_containerization.md](./01-containerization/docker_containerization.md) | Docker concepts, Dockerfile reference, multi-stage builds, volumes, networks, commands |
+| [docker_compose.md](./01-containerization/docker_compose.md) | Compose services, networks, volumes, depends_on, healthchecks, restart policies |
 
 ### Key Concepts
 
@@ -96,56 +105,169 @@ COPY . .                 # ← copy code last (changes often)
 
 > **Goal:** Automate build → test → deploy on every push using GitHub Actions.
 
-### What I'll Learn
+### What I Learned
 
-- [ ] GitHub Actions — workflows, jobs, steps, triggers
-- [ ] Build & test stage — lint and unit tests on every PR
-- [ ] Docker in CI — build and push images from the pipeline
-- [ ] Environments & secrets — staging vs production gates
-- [ ] End-to-end pipeline — push code → tests pass → image pushed to GHCR → deployed
+- **GitHub Actions concepts** — workflows, jobs, steps, actions, triggers
+- **`uses` vs `run`** — pre-built actions vs shell commands
+- **`needs`** — job dependencies (sequential jobs)
+- **`${{ }}`** — GitHub Actions expression syntax
+- **Secrets** — store credentials safely, never hardcode
+- **Caching** — `cache: "npm"` and Docker layer caching (`type=gha`)
+- **Two-workflow pattern** — `ci.yml` for PRs, `cd.yml` for deployments
+- **GHCR** — GitHub Container Registry for Docker images
+- **Auto-formatting** — Prettier workflow that commits formatted code
 
-### Planned Pipeline
+### Notes
 
+| File | Description |
+|------|-------------|
+| [cicd_pipelines.md](./03-ci-cd/cicd_pipelines.md) | Full CI/CD guide with concepts, triggers, secrets, caching |
+
+### Templates
+
+| Stack | CI | CD |
+|-------|----|----|
+| Next.js | [ci.yml](./03-ci-cd/templates/nextjs/ci.yml) | [cd.yml](./03-ci-cd/templates/nextjs/cd.yml) |
+| Next.js + Node.js | [ci.yml](./03-ci-cd/templates/nextjs-node/ci.yml) | [cd.yml](./03-ci-cd/templates/nextjs-node/cd.yml) |
+| Next.js + FastAPI | [ci.yml](./03-ci-cd/templates/nextjs-fastapi/ci.yml) | [cd.yml](./03-ci-cd/templates/nextjs-fastapi/cd.yml) |
+| FastAPI | [ci.yml](./03-ci-cd/templates/fastapi/ci.yml) | [cd.yml](./03-ci-cd/templates/fastapi/cd.yml) |
+| Laravel | [ci.yml](./03-ci-cd/templates/laravel/ci.yml) | [cd.yml](./03-ci-cd/templates/laravel/cd.yml) |
+
+### Key Concepts
+
+**Two-workflow pattern:**
 ```
-Push to main
-     ↓
-Run tests (npm test)
-     ↓
-Build Docker image
-     ↓
-Push to GitHub Container Registry (GHCR)
-     ↓
-Deploy to staging
-     ↓ (manual approval)
-Deploy to production
+PR opened       → ci.yml  → test + build only
+PR merged       → cd.yml  → build image → push GHCR → deploy via SSH
+```
+
+**Job dependency chain:**
+```
+test → build-and-push → deploy
+ ↑           ↑              ↑
+fails?    never runs    never runs
+```
+
+**Never build on the server:**
+```
+❌ Wrong: server runs docker build (slow, wastes resources)
+✅ Right: pipeline builds → pushes to GHCR → server pulls
 ```
 
 ---
 
-## Phase 3 — Kubernetes ☸️
+## Phase 3 — Networking 🌐
+
+> **Goal:** Understand how traffic flows from the internet to your app and set up NGINX as a reverse proxy.
+
+### What I Learned
+
+- **SSH** — how to connect to remote servers securely using key pairs
+- **SSH key setup** — generating keys, `authorized_keys`, `~/.ssh/config` shortcuts
+- **Multipass** — running Ubuntu VMs locally to simulate a real VPS
+- **Manual deployment** — git clone → docker build → docker run on a server
+- **Reverse proxy** — what it is, why it exists, how it works
+- **NGINX** — install, configure, enable sites, test config, reload
+- **`sites-available` vs `sites-enabled`** — symlink pattern
+- **NGINX in Docker** — running NGINX as a container in Docker Compose
+- **NGINX config** — `proxy_pass`, headers, domain-based routing, path-based routing
+- **Load balancing** — upstream blocks, round-robin
+- **SSL/HTTPS** — Let's Encrypt + Certbot
+
+### Notes
+
+| File | Description |
+|------|-------------|
+| [reverse_proxy.md](./02-networking/reverse_proxy.md) | Complete NGINX reverse proxy guide with configs, SSL, load balancing |
+
+### Key Concepts
+
+**SSH key pair:**
+```
+Private key → stays on YOUR machine (never share!)
+Public key  → goes on the SERVER (~/.ssh/authorized_keys)
+```
+
+**SSH config shortcut:**
+```
+# ~/.ssh/config
+Host devops-vm
+    HostName 192.168.252.11
+    User ubuntu
+    IdentityFile ~/.ssh/id_ed25519
+
+# Now just type:
+ssh devops-vm
+```
+
+**NGINX as reverse proxy:**
+```
+User visits http://your-server-ip
+        ↓
+NGINX listens on port 80
+        ↓
+Forwards to localhost:3000 (or portfolio:3000 in Docker)
+        ↓
+App responds → NGINX sends back to user
+```
+
+**NGINX in Docker Compose:**
+```yaml
+# proxy_pass uses SERVICE NAME not localhost!
+proxy_pass http://portfolio:3000;  # ✅ Docker Compose
+proxy_pass http://localhost:3000;  # ✅ Bare metal NGINX
+```
+
+**Never build on the server — pull instead:**
+```bash
+# ✅ Correct production deployment
+docker compose pull
+docker compose up -d
+docker image prune -f
+```
+
+---
+
+## Phase 4 — Kubernetes ☸️
 
 > **Goal:** Deploy and manage containerized apps at scale with self-healing and rolling updates.
 
-### What I'll Learn
+### What I Learned (Concepts)
 
-- [ ] Core objects — Pod, Deployment, Service, Namespace
+- **Why Kubernetes** — Docker Compose manages 1 server, Kubernetes manages many
+- **Cluster** — the whole Kubernetes system
+- **Node** — a server inside the cluster
+- **Pod** — the smallest unit, wraps your container
+- **Service** — routes traffic to the right pods
+  - `ClusterIP` → internal only (backend ↔ database)
+  - `NodePort` → external via port
+  - `LoadBalancer` → external via cloud load balancer
+- **Horizontal scaling** — more pods when traffic grows
+- **Auto-scaling** — Kubernetes adds/removes pods automatically
+- **Rolling updates** — update one pod at a time, zero downtime
+- **Rollback** — revert to previous version instantly
+
+### Still to Cover
+
+- [ ] Deployment — manages pods, rolling updates, rollbacks
+- [ ] `kubectl` — the CLI tool to talk to Kubernetes
 - [ ] ConfigMaps & Secrets — inject config into pods
-- [ ] Ingress & networking — route external traffic in
-- [ ] Rolling deployments — zero-downtime updates + rollbacks
-- [ ] Persistent storage — PersistentVolumes, PersistentVolumeClaims
+- [ ] Ingress — route external HTTP traffic
+- [ ] Volumes — persistent storage
+- [ ] Namespaces — isolate environments
 - [ ] RBAC — role-based access control
-- [ ] Observability — liveness/readiness probes, Prometheus, Grafana
-- [ ] Helm — package manager for Kubernetes
+- [ ] Deploy Atlas Edu to local cluster (Docker Desktop)
+- [ ] Deploy to real cloud cluster (GKE/EKS)
 
 ### Learning Path
 
 ```
-minikube (local) → kind → managed K8s (GKE/EKS)
+Docker Desktop K8s (local) → minikube → managed K8s (GKE/EKS)
 ```
 
 ---
 
-## Phase 4 — Cloud Platform ☁️
+## Phase 5 — Cloud Platform ☁️
 
 > **Goal:** Deploy the full stack to a real cloud provider with IaC and observability.
 
@@ -176,14 +298,16 @@ sudo apt update && sudo apt install <package>
 # User & permissions
 sudo usermod -aG docker $USER    # add user to group
 newgrp docker                    # apply group change
+chmod 700 ~/.ssh                 # secure SSH folder
+chmod 600 ~/.ssh/authorized_keys # secure authorized keys
 
-# Environment variables
-echo $USER    # current user
-echo $HOME    # home directory
-echo $PATH    # executable search paths
+# Disk usage
+df -h                            # check disk space
+docker system prune -a -f        # free Docker space
 
 # Networking
-curl -LsSf https://example.com/install.sh | sh   # download and execute script
+curl -LsSf https://example.com/install.sh | sh   # download and execute
+curl -I http://localhost:3000                      # check if app is running
 ```
 
 ---
@@ -193,11 +317,13 @@ curl -LsSf https://example.com/install.sh | sh   # download and execute script
 | Category | Tool |
 |----------|------|
 | Containerization | Docker, Docker Compose |
+| Reverse Proxy | NGINX |
 | CI/CD | GitHub Actions |
-| Orchestration | Kubernetes (minikube → GKE) |
+| Registry | GitHub Container Registry (GHCR) |
+| Orchestration | Kubernetes (Docker Desktop → GKE) |
 | IaC | Terraform |
 | Cloud | GCP / AWS |
-| Monitoring | Prometheus, Grafana |
+| Monitoring | Prometheus, Grafana, Sentry |
 | Package Manager | Helm |
 | VM (local practice) | Multipass (Ubuntu VM on macOS) |
 
@@ -208,13 +334,13 @@ curl -LsSf https://example.com/install.sh | sh   # download and execute script
 > Things I wish I knew before starting.
 
 **1. Install from official sources, not distro repos**
-Ubuntu's `docker.io` and `podman-docker` are outdated. Always use the official Docker installation method from `docs.docker.com/engine/install/ubuntu`.
+Ubuntu's `docker.io` is outdated. Always use the official Docker installation from `docs.docker.com/engine/install/ubuntu`.
 
 **2. Layer order matters more than you think**
 Putting `COPY . .` before `npm install` forces a full reinstall on every code change. Always copy `package.json` first.
 
 **3. `localhost` inside a container ≠ your machine**
-Inside a Docker container, `localhost` refers to the container itself — not your host machine. Use container/service names for inter-container communication.
+Inside Docker, `localhost` = the container itself. Use container/service names for inter-container communication.
 
 **4. `EXPOSE` doesn't actually expose anything**
 It's documentation only. Real port mapping happens with `-p host:container` at runtime.
@@ -222,8 +348,20 @@ It's documentation only. Real port mapping happens with `-p host:container` at r
 **5. `docker compose down -v` deletes your data**
 Never run this in production. `-v` removes volumes — your database is gone.
 
-**6. `node dist/server.js` over `npm start` in production**
-Direct `node` means proper signal handling — Docker's `SIGTERM` reaches your app. With `npm start`, signals can get lost in the npm process.
+**6. Never build images on the server**
+CI/CD pipeline builds and pushes to GHCR. Server only pulls and runs.
+
+**7. NGINX `proxy_pass` changes in Docker**
+Bare metal: `proxy_pass http://localhost:3000` → Docker Compose: `proxy_pass http://service-name:3000`
+
+**8. SSH vs HTTP are completely independent**
+No SSH key = can't control the server. But users can still access your app via HTTP. They're separate doors.
+
+**9. Port 3000 should never be public in production**
+NGINX listens on 80/443. App port (3000) stays internal — only NGINX talks to it directly.
+
+**10. `node dist/server.js` over `npm start` in production**
+Direct `node` = proper signal handling. With `npm start`, Docker's `SIGTERM` can get lost.
 
 ---
 
@@ -232,9 +370,12 @@ Direct `node` means proper signal handling — Docker's `SIGTERM` reaches your a
 - [Docker Official Docs](https://docs.docker.com)
 - [Docker Engine Install (Ubuntu)](https://docs.docker.com/engine/install/ubuntu/)
 - [GitHub Actions Docs](https://docs.github.com/en/actions)
+- [NGINX Docs](https://nginx.org/en/docs/)
+- [Certbot (Let's Encrypt)](https://certbot.eff.org/)
 - [Kubernetes Official Docs](https://kubernetes.io/docs/)
 - [Helm Docs](https://helm.sh/docs/)
 - [Terraform Docs](https://developer.hashicorp.com/terraform/docs)
+- [Multipass Docs](https://multipass.run/docs)
 
 ---
 
