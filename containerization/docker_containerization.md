@@ -111,7 +111,7 @@ docker images  # should work without sudo now
 
 ### On Ubuntu (Official Method)
 
-Always install from Docker's **official source** — not `docker.io` or `podman-docker` from Ubuntu's repo (they're outdated).
+Always install from Docker's **official source** https://docs.docker.com/engine/install/ubuntu/ — not `docker.io` or `podman-docker` from Ubuntu's repo (they're outdated).
 
 ```bash
 # 1. Update and install prerequisites
@@ -177,6 +177,9 @@ docker inspect <image-name>    # detailed metadata (layers, env vars, etc.)
 docker rmi <image-name>        # remove an image
 docker image prune -a          # remove all unused images
 docker image tag frontend:test frontend:v2  # tag/rename an image
+
+# Remove unused images
+docker image prune -a -f
 ```
 
 ---
@@ -245,6 +248,12 @@ docker rm -f <name>          # force remove a running container
 docker logs <name>           # view container logs
 docker logs -f <name>        # follow logs in real-time
 docker inspect <name>        # detailed container info (IP, mounts, state)
+
+# Remove everything unused at once (nuclear option)
+docker system prune -a -f
+
+# Remove stopped containers
+docker container prune -f
 ```
 
 ### Executing Commands Inside Containers
@@ -261,9 +270,33 @@ docker exec -it -u root <container-name> sh
 docker exec <container-name> npx prisma migrate deploy
 docker exec <container-name> npx prisma db push --force-reset
 docker exec <container-name> npx prisma db seed
+
+# Run as root (useful for debugging)
+docker exec -it -u root <container> sh
 ```
 
 > `docker exec` is like SSH-ing into a server — but it's a container.
+
+### Neworks & Volumes
+```
+# Networks
+
+docker network create <name>
+docker network ls
+docker network inspect <name>
+docker network rm <name>
+docker network connect <network> <container>
+
+
+# Volumes - dedicated, persistent storage space managed entirely by the Docker daemon
+
+docker volume create <name>
+docker volume ls
+docker volume inspect <name>
+docker volume rm <name>
+docker volume prune        ← delete all unused volumes
+
+```
 
 ---
 
