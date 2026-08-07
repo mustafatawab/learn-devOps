@@ -1,6 +1,6 @@
 # ⚙️ CI/CD Pipelines with GitHub Actions
 
-A beginner-friendly guide to understanding and implementing CI/CD pipelines — from zero to production.
+A beginner-friendly guide to understanding and implementing CI/CD pipelines - from zero to production.
 
 ---
 
@@ -26,7 +26,7 @@ You built an app. It works perfectly. Your friend also starts working on the sam
 
 **What would you do before adding his code?**
 
-Naturally — you'd run it first. Make sure it works. Make sure it doesn't break anything.
+Naturally - you'd run it first. Make sure it works. Make sure it doesn't break anything.
 
 Now imagine instead of 1 friend, you have **10 friends** all sending you code every day. Would you manually run and test each person's code every single day?
 
@@ -34,7 +34,7 @@ That becomes impossible. **CI/CD automates exactly this.**
 
 ---
 
-### CI — Continuous Integration
+### CI - Continuous Integration
 
 Every time someone pushes code, a robot automatically:
 
@@ -50,11 +50,11 @@ Developer pushes code
 ✅ Everything passed → PR is safe to merge
 ```
 
-No broken code ever reaches `main` — automatically, without anyone doing it manually.
+No broken code ever reaches `main` - automatically, without anyone doing it manually.
 
 ---
 
-### CD — Continuous Deployment
+### CD - Continuous Deployment
 
 Once code is merged to `main`, a robot automatically:
 
@@ -74,7 +74,7 @@ No SSH-ing into servers. No forgetting to pull. No deploying broken code.
 
 ---
 
-### CI vs CD — Summary
+### CI vs CD - Summary
 
 ```
 CI (Continuous Integration)   → verify code is safe to merge
@@ -100,7 +100,7 @@ your PR:         C + D
 after merge: A + B + C + D  ← test THIS, not just D
 ```
 
-Always test what's actually in `main` — not just the branch.
+Always test what's actually in `main` - not just the branch.
 
 ---
 
@@ -109,9 +109,9 @@ Always test what's actually in `main` — not just the branch.
 GitHub Actions is GitHub's built-in CI/CD platform. It's:
 
 - **Free** for public repos
-- **Built into GitHub** — no separate tool to set up
+- **Built into GitHub** - no separate tool to set up
 - **Triggered automatically** by events in your repo (push, PR, etc.)
-- **Runs on GitHub's servers** — no server management needed
+- **Runs on GitHub's servers** - no server management needed
 
 Every time you push code, GitHub spins up a **fresh virtual machine**, runs your pipeline, and destroys the machine when done.
 
@@ -130,7 +130,7 @@ Workflow  →  A single automation process (one YAML file)
 
 ### Workflow
 
-A YAML file inside `.github/workflows/`. GitHub scans all files in this folder automatically — the filename doesn't matter, only the content.
+A YAML file inside `.github/workflows/`. GitHub scans all files in this folder automatically - the filename doesn't matter, only the content.
 
 ```
 your-repo/
@@ -159,7 +159,7 @@ uses: docker/login-action@v3    # logs into a Docker registry
 uses: appleboy/ssh-action@v1    # SSHs into your server
 ```
 
-The `@v4` is the version — just like `npm install express@4`.
+The `@v4` is the version - just like `npm install express@4`.
 
 ---
 
@@ -207,7 +207,7 @@ jobs:                      # what to run
 | `with:` | Pass parameters to an action |
 | `env:` | Set environment variables |
 | `needs:` | Wait for another job to finish |
-| `${{ }}` | Expression syntax — reference variables, secrets, context |
+| `${{ }}` | Expression syntax - reference variables, secrets, context |
 | `${{ secrets.NAME }}` | Read a GitHub secret |
 | `${{ github.actor }}` | GitHub username that triggered the workflow |
 | `${{ github.repository }}` | `owner/repo-name` |
@@ -235,8 +235,8 @@ jobs:                      # what to run
 ```
 
 `npm ci` is better in pipelines because:
-- Faster — skips dependency resolution
-- Deterministic — uses `package-lock.json` exactly
+- Faster - skips dependency resolution
+- Deterministic - uses `package-lock.json` exactly
 - Fails if `package-lock.json` is out of sync with `package.json`
 
 ---
@@ -376,7 +376,7 @@ Your repo → Settings → Secrets and variables → Actions → New repository 
 | `RESEND_API_KEY` | Email API key |
 | `DATABASE_URL` | Database connection string |
 
-> **Note:** `GITHUB_TOKEN` is provided automatically by GitHub — no setup needed. It's used for pushing to GHCR.
+> **Note:** `GITHUB_TOKEN` is provided automatically by GitHub - no setup needed. It's used for pushing to GHCR.
 
 ---
 
@@ -434,8 +434,8 @@ Without caching, every pipeline run downloads all dependencies from scratch. Wit
 
 Ready-made CI/CD pipeline templates for different project stacks. Each template includes:
 
-- `ci.yml` — runs on every PR (test + build)
-- `cd.yml` — runs on merge to main (build Docker image → push to GHCR → deploy to VPS via SSH)
+- `ci.yml` - runs on every PR (test + build)
+- `cd.yml` - runs on merge to main (build Docker image → push to GHCR → deploy to VPS via SSH)
 
 All templates assume:
 - Docker + Docker Compose on the VPS

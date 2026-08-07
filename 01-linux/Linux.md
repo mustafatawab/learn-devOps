@@ -1,6 +1,6 @@
 # Linux for Beginners
 
-A simple guide to the Linux OS, the terminal, and everyday commands — written for people starting DevOps or learning Linux from scratch.
+A simple guide to the Linux OS, the terminal, and everyday commands - written for people starting DevOps or learning Linux from scratch.
 
 ---
 
@@ -30,7 +30,7 @@ A simple guide to the Linux OS, the terminal, and everyday commands — written 
 
 **Linux** is an open-source operating system. Servers, cloud VMs, Docker containers, and most DevOps tools run on Linux.
 
-You mostly work with Linux through the **terminal** (command line) — a text window where you type commands instead of clicking buttons.
+You mostly work with Linux through the **terminal** (command line) - a text window where you type commands instead of clicking buttons.
 
 > Think of Windows Explorer / Finder as the GUI. The terminal is the same computer, controlled with text commands.
 
@@ -50,7 +50,7 @@ When you open a terminal, you get a **shell** (often `bash` or `zsh`). The shell
 |------|---------|
 | **Home directory** | Your personal folder, usually `/home/username` (shortcut: `~`) |
 | **Path** | Full location of a file, e.g. `/var/log/nginx/error.log` |
-| **Absolute path** | Starts from root `/` — always the same place |
+| **Absolute path** | Starts from root `/` - always the same place |
 | **Relative path** | Relative to where you are now (e.g. `./app`, `../logs`) |
 | **Root `/`** | Top of the filesystem tree |
 | **Root user** | Superuser (admin). Use carefully with `sudo` |
@@ -62,9 +62,9 @@ echo $PATH          # folders where the shell looks for commands
 whoami              # current username
 ```
 
-**`whoami`** — Prints the username of the current user.
+**`whoami`** - Prints the username of the current user.
 
-**`sudo`** — Runs a command with admin (root) privileges. Needed for installs, services, and system files.
+**`sudo`** - Runs a command with admin (root) privileges. Needed for installs, services, and system files.
 
 ```bash
 sudo apt update
@@ -74,13 +74,13 @@ sudo apt update
 
 ## Navigation
 
-**`pwd`** — Prints the full path of your current working directory (where you are right now).
+**`pwd`** - Prints the full path of your current working directory (where you are right now).
 
 ```bash
 pwd
 ```
 
-**`cd`** — Changes your current directory.
+**`cd`** - Changes your current directory.
 
 ```bash
 cd /var/log          # go to /var/log
@@ -89,7 +89,7 @@ cd ..                # go one level up
 cd -                 # go back to previous directory
 ```
 
-**`ls`** — Lists files and directories in the current folder.
+**`ls`** - Lists files and directories in the current folder.
 
 ```bash
 ls                   # basic list
@@ -102,34 +102,34 @@ ls -lah              # long + all + human-readable sizes
 
 ## File & Directory Management
 
-**`touch`** — Creates a new empty file, or updates the timestamp if the file already exists.
+**`touch`** - Creates a new empty file, or updates the timestamp if the file already exists.
 
 ```bash
 touch notes.txt
 ```
 
-**`mkdir`** — Creates a new directory (folder).
+**`mkdir`** - Creates a new directory (folder).
 
 ```bash
 mkdir new_folder
 mkdir -p projects/app/src   # create nested folders in one go
 ```
 
-**`rmdir`** — Removes an **empty** directory only.
+**`rmdir`** - Removes an **empty** directory only.
 
 ```bash
 rmdir empty_folder
 ```
 
-**`rm`** — Deletes files. Use carefully — deleted files do not go to a recycle bin.
+**`rm`** - Deletes files. Use carefully - deleted files do not go to a recycle bin.
 
 ```bash
 rm file.txt              # delete a file
 rm -r folder             # delete a directory and its contents
-rm -rf folder            # force delete (no prompts) — be very careful
+rm -rf folder            # force delete (no prompts) - be very careful
 ```
 
-**`cp`** — Copies files or directories from one place to another.
+**`cp`** - Copies files or directories from one place to another.
 
 ```bash
 cp source.txt dest.txt
@@ -137,7 +137,7 @@ cp file.txt /home/ubuntu/
 cp -r source_dir/ dest_dir/    # copy a directory recursively
 ```
 
-**`mv`** — Moves a file/folder, or renames it.
+**`mv`** - Moves a file/folder, or renames it.
 
 ```bash
 mv old.txt new.txt              # rename
@@ -148,26 +148,26 @@ mv file.txt /home/ubuntu/docs/  # move
 
 ## Viewing & Editing Files
 
-**`cat`** — Prints the entire file contents to the screen. Best for short files.
+**`cat`** - Prints the entire file contents to the screen. Best for short files.
 
 ```bash
 cat filename
 ```
 
-**`less`** — Opens a file for interactive viewing. Scroll with arrows; press `q` to quit.
+**`less`** - Opens a file for interactive viewing. Scroll with arrows; press `q` to quit.
 
 ```bash
 less /var/log/syslog
 ```
 
-**`head`** — Shows the first lines of a file (default: 10).
+**`head`** - Shows the first lines of a file (default: 10).
 
 ```bash
 head filename
 head -n 20 filename
 ```
 
-**`tail`** — Shows the last lines of a file (default: 10). Useful for logs.
+**`tail`** - Shows the last lines of a file (default: 10). Useful for logs.
 
 ```bash
 tail filename
@@ -175,14 +175,14 @@ tail -n 50 filename
 tail -f /var/log/nginx/access.log   # follow live updates
 ```
 
-**`nano`** — Simple beginner-friendly text editor in the terminal.
+**`nano`** - Simple beginner-friendly text editor in the terminal.
 
 ```bash
 nano filename
 # Ctrl+O save, Ctrl+X exit
 ```
 
-**`vim`** — Powerful text editor (steeper learning curve). Press `i` to insert, `Esc` then `:wq` to save and quit, or `:q!` to quit without saving.
+**`vim`** - Powerful text editor (steeper learning curve). Press `i` to insert, `Esc` then `:wq` to save and quit, or `:q!` to quit without saving.
 
 ```bash
 vim filename
@@ -192,7 +192,7 @@ vim filename
 
 ## Search
 
-**`grep`** — Finds and prints lines that contain a search term in a file (or many files).
+**`grep`** - Finds and prints lines that contain a search term in a file (or many files).
 
 ```bash
 grep "error" filename
@@ -200,7 +200,7 @@ grep -i "error" filename          # case-insensitive
 grep -r "TODO" ./src              # search recursively in a folder
 ```
 
-**`find`** — Searches for files and directories by name, type, or other rules.
+**`find`** - Searches for files and directories by name, type, or other rules.
 
 ```bash
 find . -name "*.log"              # logs in current tree
@@ -221,21 +221,21 @@ ls -l
 
 Example output idea: `-rw-r--r--  1 ubuntu ubuntu  120 Jul 29 notes.txt`
 
-**`chmod`** — Changes file permissions (who can read, write, or execute).
+**`chmod`** - Changes file permissions (who can read, write, or execute).
 
 ```bash
 chmod 755 script.sh     # owner: rwx, group/others: r-x
 chmod +x script.sh      # make a file executable
 ```
 
-**`chown`** — Changes the user and/or group ownership of a file or folder.
+**`chown`** - Changes the user and/or group ownership of a file or folder.
 
 ```bash
 sudo chown ubuntu:ubuntu file.txt
 sudo chown -R ubuntu:ubuntu /var/www/app
 ```
 
-**`passwd`** — Changes the password for a user account.
+**`passwd`** - Changes the password for a user account.
 
 ```bash
 passwd                  # change your own password
@@ -246,37 +246,37 @@ sudo passwd ubuntu      # change another user's password (as admin)
 
 ## System Information
 
-**`uname`** — Shows core system / kernel information.
+**`uname`** - Shows core system / kernel information.
 
 ```bash
 uname -a                # full details (kernel, arch, etc.)
 ```
 
-**`hostname`** — Shows (or sets) the computer’s network name.
+**`hostname`** - Shows (or sets) the computer’s network name.
 
 ```bash
 hostname
 ```
 
-**`uptime`** — How long the system has been running, plus load averages.
+**`uptime`** - How long the system has been running, plus load averages.
 
 ```bash
 uptime
 ```
 
-**`free`** — Shows total, used, and available RAM and swap.
+**`free`** - Shows total, used, and available RAM and swap.
 
 ```bash
 free -h                 # human-readable (MB/GB)
 ```
 
-**`df`** — Shows disk space usage for mounted filesystems.
+**`df`** - Shows disk space usage for mounted filesystems.
 
 ```bash
 df -h
 ```
 
-**`du`** — Shows how much space a folder/file uses.
+**`du`** - Shows how much space a folder/file uses.
 
 ```bash
 du -sh /var/log         # summary for one path
@@ -289,21 +289,21 @@ du -h --max-depth=1 .   # size of each item in current folder
 
 A **process** is a running program.
 
-**`ps`** — Lists running processes.
+**`ps`** - Lists running processes.
 
 ```bash
 ps                      # basic
 ps aux                  # detailed list of all processes
 ```
 
-**`top`** / **`htop`** — Live view of CPU and memory usage by process. Press `q` to quit. (`htop` is nicer if installed.)
+**`top`** / **`htop`** - Live view of CPU and memory usage by process. Press `q` to quit. (`htop` is nicer if installed.)
 
 ```bash
 top
 htop
 ```
 
-**`kill`** — Stops a process by its PID (process ID).
+**`kill`** - Stops a process by its PID (process ID).
 
 ```bash
 kill 1234
@@ -316,8 +316,8 @@ Useful monitors (install with apt):
 sudo apt install iftop atop
 ```
 
-**`iftop`** — Live view of network bandwidth by connection.  
-**`atop`** — Advanced system/process monitor (CPU, disk, network over time).
+**`iftop`** - Live view of network bandwidth by connection.  
+**`atop`** - Advanced system/process monitor (CPU, disk, network over time).
 
 ---
 
@@ -335,14 +335,14 @@ du -sh *    # size of items in current directory
 
 ## Networking & Connectivity
 
-**`ping`** — Sends packets to a host to test if it is reachable.
+**`ping`** - Sends packets to a host to test if it is reachable.
 
 ```bash
 ping google.com
 ping -c 4 8.8.8.8       # stop after 4 packets
 ```
 
-**`curl`** — Talks to URLs from the terminal (download content, test APIs).
+**`curl`** - Talks to URLs from the terminal (download content, test APIs).
 
 ```bash
 curl https://google.com
@@ -350,14 +350,14 @@ curl -s https://google.com          # silent (less noise)
 curl -I https://example.com         # headers only
 ```
 
-**`wget`** — Downloads files from the web.
+**`wget`** - Downloads files from the web.
 
 ```bash
 wget https://example.com/file.zip
 wget -qO- https://google.com        # quiet, print to screen
 ```
 
-**`ip`** / **`ifconfig`** — Shows network interfaces and IP addresses. Prefer `ip` on modern Linux.
+**`ip`** / **`ifconfig`** - Shows network interfaces and IP addresses. Prefer `ip` on modern Linux.
 
 ```bash
 ip a                    # addresses
@@ -365,7 +365,7 @@ ip link                 # interfaces
 ifconfig                # older style (may need net-tools package)
 ```
 
-**`ssh`** — Connects securely to a remote Linux machine.
+**`ssh`** - Connects securely to a remote Linux machine.
 
 ```bash
 ssh ubuntu@192.168.1.10
@@ -387,9 +387,9 @@ sudo apt remove nginx               # remove a package
 sudo apt search keyword             # search package names
 ```
 
-**`apt update`** — Downloads the latest list of available packages (does not install them yet).  
-**`apt install`** — Installs software from the package repository.  
-**`apt remove`** — Uninstalls a package.
+**`apt update`** - Downloads the latest list of available packages (does not install them yet).  
+**`apt install`** - Installs software from the package repository.  
+**`apt remove`** - Uninstalls a package.
 
 ---
 
@@ -397,7 +397,7 @@ sudo apt search keyword             # search package names
 
 **systemd** manages background services (nginx, docker, ssh, etc.).
 
-**`systemctl`** — Start, stop, restart, enable, and check service status.
+**`systemctl`** - Start, stop, restart, enable, and check service status.
 
 ```bash
 sudo systemctl status nginx         # is nginx running?
@@ -409,7 +409,7 @@ sudo systemctl disable nginx        # do not start on boot
 sudo systemctl reload nginx         # reload config without full restart
 ```
 
-**`journalctl`** — Views logs collected by systemd.
+**`journalctl`** - Views logs collected by systemd.
 
 ```bash
 journalctl -u nginx                 # logs for nginx service
@@ -420,14 +420,14 @@ journalctl -u nginx -f              # follow live
 
 ## Archives
 
-**`tar`** — Creates or extracts archive files (often with gzip compression).
+**`tar`** - Creates or extracts archive files (often with gzip compression).
 
 ```bash
 tar -czvf backup.tar.gz folder/     # create compressed archive
 tar -xzvf backup.tar.gz             # extract
 ```
 
-**`zip`** / **`unzip`** — Zip format create / extract.
+**`zip`** / **`unzip`** - Zip format create / extract.
 
 ```bash
 zip -r archive.zip folder/
@@ -438,28 +438,28 @@ unzip archive.zip
 
 ## Pipes & Redirects
 
-These let you combine commands and save output — very common in real work.
+These let you combine commands and save output - very common in real work.
 
-**Pipe `|`** — Sends output of one command into the next.
+**Pipe `|`** - Sends output of one command into the next.
 
 ```bash
 ps aux | grep nginx
 cat file.log | grep "error"
 ```
 
-**Redirect `>`** — Writes command output to a file (overwrites).
+**Redirect `>`** - Writes command output to a file (overwrites).
 
 ```bash
 echo "hello" > notes.txt
 ```
 
-**Redirect `>>`** — Appends to a file (does not overwrite).
+**Redirect `>>`** - Appends to a file (does not overwrite).
 
 ```bash
 echo "another line" >> notes.txt
 ```
 
-**Redirect `<`** — Feeds a file as input to a command.
+**Redirect `<`** - Feeds a file as input to a command.
 
 ```bash
 sort < names.txt
@@ -469,7 +469,7 @@ sort < names.txt
 
 ## Multipass (Local Linux VMs)
 
-[Multipass](https://multipass.run/) runs Ubuntu VMs on your laptop — great for practicing Linux without a cloud server.
+[Multipass](https://multipass.run/) runs Ubuntu VMs on your laptop - great for practicing Linux without a cloud server.
 
 ```bash
 multipass list                          # list all VMs

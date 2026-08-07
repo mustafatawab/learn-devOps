@@ -1,14 +1,14 @@
 # 🔧 NGINX Setup Guide
 
-A step-by-step guide to setting up NGINX as a reverse proxy from scratch — covering bare metal installation and Docker Compose setup.
+A step-by-step guide to setting up NGINX as a reverse proxy from scratch - covering bare metal installation and Docker Compose setup.
 
 ---
 
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Setup A — Bare Metal NGINX](#setup-a--bare-metal-nginx)
-3. [Setup B — NGINX in Docker Compose](#setup-b--nginx-in-docker-compose)
+2. [Setup A - Bare Metal NGINX](#setup-a--bare-metal-nginx)
+3. [Setup B - NGINX in Docker Compose](#setup-b--nginx-in-docker-compose)
 4. [Adding SSL with Let's Encrypt](#adding-ssl-with-lets-encrypt)
 5. [Multiple Apps on One Server](#multiple-apps-on-one-server)
 6. [Quick Reference](#quick-reference)
@@ -23,11 +23,11 @@ A step-by-step guide to setting up NGINX as a reverse proxy from scratch — cov
 
 ---
 
-## Setup A — Bare Metal NGINX
+## Setup A - Bare Metal NGINX
 
 Use this when your app runs directly on the server (not in Docker).
 
-### Step 1 — Install NGINX
+### Step 1 - Install NGINX
 
 ```bash
 sudo apt update
@@ -41,11 +41,11 @@ sudo systemctl enable nginx
 sudo systemctl status nginx
 ```
 
-Visit `http://YOUR_SERVER_IP` — you should see the NGINX welcome page. ✅
+Visit `http://YOUR_SERVER_IP` - you should see the NGINX welcome page. ✅
 
 ---
 
-### Step 2 — Create Site Config
+### Step 2 - Create Site Config
 
 ```bash
 sudo nano /etc/nginx/sites-available/myapp
@@ -81,7 +81,7 @@ Save with `Ctrl+X → Y → Enter`.
 
 ---
 
-### Step 3 — Enable the Site
+### Step 3 - Enable the Site
 
 ```bash
 # Create symlink to enable the site
@@ -93,7 +93,7 @@ sudo rm /etc/nginx/sites-enabled/default
 
 ---
 
-### Step 4 — Test Config
+### Step 4 - Test Config
 
 **Always test before reloading:**
 
@@ -107,23 +107,23 @@ nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
 
-If it fails — fix the config, do NOT reload.
+If it fails - fix the config, do NOT reload.
 
 ---
 
-### Step 5 — Reload NGINX
+### Step 5 - Reload NGINX
 
 ```bash
 sudo systemctl reload nginx
 ```
 
-> Use `reload` not `restart` — reload applies new config without dropping existing connections.
+> Use `reload` not `restart` - reload applies new config without dropping existing connections.
 
 ---
 
-### Step 6 — Verify
+### Step 6 - Verify
 
-Visit `http://YOUR_SERVER_IP` — you should see your app without any port number. ✅
+Visit `http://YOUR_SERVER_IP` - you should see your app without any port number. ✅
 
 ```bash
 # Quick check from terminal
@@ -133,7 +133,7 @@ curl -I http://YOUR_SERVER_IP
 
 ---
 
-## Setup B — NGINX in Docker Compose
+## Setup B - NGINX in Docker Compose
 
 Use this when your app runs inside Docker containers.
 
@@ -156,7 +156,7 @@ your-project/
 
 ---
 
-### Step 1 — Create NGINX Config
+### Step 1 - Create NGINX Config
 
 ```bash
 mkdir nginx
@@ -193,7 +193,7 @@ server {
 
 ---
 
-### Step 2 — Write compose.yaml
+### Step 2 - Write compose.yaml
 
 ```yaml
 name: myapp
@@ -204,7 +204,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    # ❌ Do NOT expose port 3000 — NGINX handles all traffic
+    # ❌ Do NOT expose port 3000 - NGINX handles all traffic
     env_file:
       - ./.env
     restart: unless-stopped
@@ -225,7 +225,7 @@ services:
 
 ---
 
-### Step 3 — Start Everything
+### Step 3 - Start Everything
 
 ```bash
 docker compose up -d --build
@@ -233,7 +233,7 @@ docker compose up -d --build
 
 ---
 
-### Step 4 — Verify
+### Step 4 - Verify
 
 ```bash
 # Check all containers are running
@@ -246,11 +246,11 @@ docker compose logs nginx
 docker compose logs app
 ```
 
-Visit `http://YOUR_SERVER_IP` — your app should load without any port number. ✅
+Visit `http://YOUR_SERVER_IP` - your app should load without any port number. ✅
 
 ---
 
-### Step 5 — Redeploy After Code Changes
+### Step 5 - Redeploy After Code Changes
 
 ```bash
 # Rebuild and restart
@@ -277,7 +277,7 @@ sudo apt install -y certbot python3-certbot-nginx
 # Get certificate (replace with your domain)
 sudo certbot --nginx -d portfolio.com -d www.portfolio.com
 
-# Certbot auto-renews — verify renewal works
+# Certbot auto-renews - verify renewal works
 sudo certbot renew --dry-run
 ```
 
@@ -449,7 +449,7 @@ sudo certbot renew --dry-run
 
 | Problem | Solution |
 |---------|----------|
-| `502 Bad Gateway` | App not running — check `curl localhost:3000` |
+| `502 Bad Gateway` | App not running - check `curl localhost:3000` |
 | `404 Not Found` | Wrong `server_name` or `location` |
 | Config error on reload | Run `sudo nginx -t` and fix errors first |
 | Site not working | Check symlink exists in `sites-enabled` |

@@ -1,6 +1,6 @@
 # 🐙 Docker Compose
 
-A complete guide to Docker Compose — defining and running multi-container applications.
+A complete guide to Docker Compose - defining and running multi-container applications.
 
 ---
 
@@ -28,17 +28,17 @@ Docker Compose is a tool for defining and running **multi-container** Docker app
 Instead of running multiple `docker run` commands manually:
 
 ```bash
-# Without Compose — painful 😩
+# Without Compose - painful 😩
 docker network create app-network
 docker run -d --name postgres --network app-network ...
 docker run -d --name backend --network app-network ...
 docker run -d --name frontend --network app-network ...
 ```
 
-With Compose — one command does it all:
+With Compose - one command does it all:
 
 ```bash
-# With Compose — simple 🚀
+# With Compose - simple 🚀
 docker compose up -d
 ```
 
@@ -123,7 +123,7 @@ ports:
 
 ### volumes
 
-**Bind mount** — sync local files to container (dev mode):
+**Bind mount** - sync local files to container (dev mode):
 
 ```yaml
 volumes:
@@ -133,7 +133,7 @@ volumes:
 
 > The second line (`/app/node_modules`) is an **anonymous volume** that prevents your host's `node_modules` from overwriting the container's. This matters because packages with native bindings (like `bcrypt`) compile differently on macOS vs Linux.
 
-**Named volume** — persistent storage managed by Docker:
+**Named volume** - persistent storage managed by Docker:
 
 ```yaml
 volumes:
@@ -163,7 +163,7 @@ container_name: taskflow_db
 
 ## Networks
 
-All services in a `compose.yaml` can talk to each other using their **service name as hostname** — as long as they're on the same network.
+All services in a `compose.yaml` can talk to each other using their **service name as hostname** - as long as they're on the same network.
 
 ```yaml
 # backend can reach db at "db:5432"
@@ -215,15 +215,15 @@ volumes:
 
 Data survives `docker compose down` but is deleted with `docker compose down -v`.
 
-> ⚠️ **Never run `docker compose down -v` in production** — it permanently deletes all volume data (your database!).
+> ⚠️ **Never run `docker compose down -v` in production** - it permanently deletes all volume data (your database!).
 
 ---
 
 ## Environment Variables
 
-There are two ways to pass env vars — and they can be used together:
+There are two ways to pass env vars - and they can be used together:
 
-### `env_file` — load from a file
+### `env_file` - load from a file
 
 ```yaml
 env_file:
@@ -232,7 +232,7 @@ env_file:
 
 Loads all variables from the `.env` file.
 
-### `environment` — inline hardcoded values
+### `environment` - inline hardcoded values
 
 ```yaml
 environment:
@@ -244,7 +244,7 @@ environment:
 
 **`environment` (inline) always overrides `env_file`.**
 
-This is intentional — use `env_file` for most variables (like JWT secrets, email credentials) and `environment` to override specific ones (like `DATABASE_URL` to point to the local `db` container instead of NeonDB).
+This is intentional - use `env_file` for most variables (like JWT secrets, email credentials) and `environment` to override specific ones (like `DATABASE_URL` to point to the local `db` container instead of NeonDB).
 
 ```yaml
 env_file:
@@ -332,7 +332,7 @@ Controls what happens when a container stops:
 
 ```yaml
 restart: "no"              # never restart (default)
-restart: always            # always restart — even if YOU stopped it manually
+restart: always            # always restart - even if YOU stopped it manually
 restart: unless-stopped    # restart on crash, but respect manual stops ✅
 restart: on-failure        # only restart on error exit code
 restart: on-failure:3      # retry max 3 times then give up
@@ -372,7 +372,7 @@ command: sh -c "cleanup.sh ; node dist/server.js"
 command: sh -c "try-primary || fallback"
 ```
 
-**Practical example** — migrate then start:
+**Practical example** - migrate then start:
 
 ```yaml
 backend:
@@ -425,7 +425,7 @@ docker compose exec backend npx prisma studio # run a command in a service
 
 ```bash
 docker compose up -d           # use existing cached images (no rebuild)
-docker compose up -d --build   # force rebuild — use when you changed code
+docker compose up -d --build   # force rebuild - use when you changed code
 ```
 
 ---

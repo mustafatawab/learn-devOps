@@ -1,6 +1,6 @@
-# 03 — Git & GitHub
+# 03 - Git & GitHub
 
-Version control from zero to hero — for DevOps engineers who need clean history, safe collaboration, and CI/CD that starts from Git events.
+Version control from zero to hero - for DevOps engineers who need clean history, safe collaboration, and CI/CD that starts from Git events.
 
 ---
 
@@ -58,4 +58,4 @@ Without solid Git skills you cannot:
 
 ## After this module
 
-Go to **[05-ci-cd](../05-ci-cd/)** — GitHub Actions builds on push/PR events you learn here.
+Go to **[05-ci-cd](../05-ci-cd/)** - GitHub Actions builds on push/PR events you learn here.

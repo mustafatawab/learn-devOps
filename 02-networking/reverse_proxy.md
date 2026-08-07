@@ -25,7 +25,7 @@ A beginner-friendly guide to understanding reverse proxies and configuring Nginx
 
 ## What is a Reverse Proxy?
 
-Imagine you call a big company's customer service number. You don't know which specific employee will answer — you just call one number and the company decides internally who handles your call.
+Imagine you call a big company's customer service number. You don't know which specific employee will answer - you just call one number and the company decides internally who handles your call.
 
 ```
 You (customer)
@@ -114,12 +114,12 @@ Reverse proxy:   Internet → Proxy → Your Apps
 
 ## Why Use a Reverse Proxy?
 
-- **Hide backend servers** — users never see `:3000`, `:4000`, etc.
-- **One public entry point** — port 80/443 only
-- **SSL / HTTPS termination** — Nginx handles certificates; apps can stay on HTTP internally
-- **Load balancing** — spread traffic across multiple app instances
-- **Routing** — by domain (`api.com`) or by path (`/api`)
-- **Extra features** — caching, compression, rate limiting, access logs
+- **Hide backend servers** - users never see `:3000`, `:4000`, etc.
+- **One public entry point** - port 80/443 only
+- **SSL / HTTPS termination** - Nginx handles certificates; apps can stay on HTTP internally
+- **Load balancing** - spread traffic across multiple app instances
+- **Routing** - by domain (`api.com`) or by path (`/api`)
+- **Extra features** - caching, compression, rate limiting, access logs
 
 ---
 
@@ -207,7 +207,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-If `nginx -t` fails, **do not reload** — fix the config first.
+If `nginx -t` fails, **do not reload** - fix the config first.
 
 ---
 

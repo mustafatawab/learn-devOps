@@ -1,6 +1,6 @@
 # 🐳 Docker & Containerization
 
-A complete guide to understanding Docker from scratch — concepts, commands, and best practices.
+A complete guide to understanding Docker from scratch - concepts, commands, and best practices.
 
 ---
 
@@ -23,14 +23,14 @@ A complete guide to understanding Docker from scratch — concepts, commands, an
 
 ## What is Docker?
 
-Docker is a platform for developing, shipping, and running applications inside **containers**. A container packages your application with all its dependencies — ensuring it runs the same way on every machine.
+Docker is a platform for developing, shipping, and running applications inside **containers**. A container packages your application with all its dependencies - ensuring it runs the same way on every machine.
 
-> Think of it like a shipping container — the content is always the same no matter which ship carries it.
+> Think of it like a shipping container - the content is always the same no matter which ship carries it.
 
 ### The Problem Docker Solves
 
 Without Docker:
-- "It works on my machine" — but breaks in production
+- "It works on my machine" - but breaks in production
 - Setting up environments manually is error-prone
 - Different OS, different dependency versions = chaos
 
@@ -50,15 +50,15 @@ Image     = Blueprint / Class
 Container = Running instance of that image / Object
 ```
 
-Just like OOP — one class, many instances. One image, many containers.
+Just like OOP - one class, many instances. One image, many containers.
 
 ### Docker Hub
 
-Docker Hub (`hub.docker.com`) is the public registry where images are stored and shared — think of it like **npm registry but for Docker images**.
+Docker Hub (`hub.docker.com`) is the public registry where images are stored and shared - think of it like **npm registry but for Docker images**.
 
 ### Image Layers
 
-Every image is made up of **layers** — each layer represents one instruction in the Dockerfile:
+Every image is made up of **layers** - each layer represents one instruction in the Dockerfile:
 
 ```
 Layer 1 → Base OS (Alpine/Ubuntu)      ← rarely changes
@@ -111,7 +111,7 @@ docker images  # should work without sudo now
 
 ### On Ubuntu (Official Method)
 
-Always install from Docker's **official source** https://docs.docker.com/engine/install/ubuntu/ — not `docker.io` or `podman-docker` from Ubuntu's repo (they're outdated).
+Always install from Docker's **official source** https://docs.docker.com/engine/install/ubuntu/ - not `docker.io` or `podman-docker` from Ubuntu's repo (they're outdated).
 
 ```bash
 # 1. Update and install prerequisites
@@ -207,7 +207,7 @@ docker run -d -p 4000:4000 --env-file ./backend/.env <image-name>:<tag>
 # Run with inline environment variables
 docker run -d -e DATABASE_URL=postgresql://... <image-name>
 
-# Run with volume mount (dev mode — live code updates)
+# Run with volume mount (dev mode - live code updates)
 docker run -p 4000:4000 \
   -v $(pwd):/app \          # mount local folder into container
   -v /app/node_modules \    # protect container's node_modules
@@ -232,7 +232,7 @@ docker run --rm <image-name>
 
 > **`$(pwd)`** = present working directory. A Linux variable that expands to your current path.
 
-> **`-v $(pwd):/app -v /app/node_modules`** — mounts your local code BUT protects the container's `node_modules`. Since `node_modules` built on macOS may differ from Linux (native packages like `bcrypt`), the container keeps its own.
+> **`-v $(pwd):/app -v /app/node_modules`** - mounts your local code BUT protects the container's `node_modules`. Since `node_modules` built on macOS may differ from Linux (native packages like `bcrypt`), the container keeps its own.
 
 ### Managing Containers
 
@@ -275,7 +275,7 @@ docker exec <container-name> npx prisma db seed
 docker exec -it -u root <container> sh
 ```
 
-> `docker exec` is like SSH-ing into a server — but it's a container.
+> `docker exec` is like SSH-ing into a server - but it's a container.
 
 ### Neworks & Volumes
 ```
@@ -324,7 +324,7 @@ A `Dockerfile` is a set of instructions to build a Docker image.
 
 ### Key Notes
 
-**`EXPOSE` is just documentation** — it does NOT actually open ports. Ports are opened with the `-p` flag at runtime:
+**`EXPOSE` is just documentation** - it does NOT actually open ports. Ports are opened with the `-p` flag at runtime:
 ```bash
 docker run -p 3000:3000 my-app  # host:container
 ```
@@ -332,7 +332,7 @@ docker run -p 3000:3000 my-app  # host:container
 **`CMD` vs `ENTRYPOINT`:**
 ```dockerfile
 ENTRYPOINT ["node"]        # always runs node
-CMD ["dist/server.js"]     # default arg — can be overridden
+CMD ["dist/server.js"]     # default arg - can be overridden
 ```
 
 ### Example: Node.js/Express Dockerfile (Single Stage)
@@ -367,17 +367,17 @@ CMD ["node", "dist/server.js"]
 ### Layer Caching Strategy
 
 ```dockerfile
-# ✅ CORRECT — copy package.json first, then code
+# ✅ CORRECT - copy package.json first, then code
 COPY package*.json ./   → layer 3 (changes rarely)
 RUN npm install         → layer 4 (changes rarely, cached!)
 COPY . .                → layer 5 (changes often)
 
-# ❌ WRONG — copying everything forces npm install every time
-COPY . .                → layer 3 (changes often — cache busted!)
+# ❌ WRONG - copying everything forces npm install every time
+COPY . .                → layer 3 (changes often - cache busted!)
 RUN npm install         → layer 4 (forced to re-run every time)
 ```
 
-**Why?** Docker invalidates a layer and all layers below it when any file involved changes. Since your app code changes often but `package.json` changes rarely — separate them!
+**Why?** Docker invalidates a layer and all layers below it when any file involved changes. Since your app code changes often but `package.json` changes rarely - separate them!
 
 ---
 
@@ -393,7 +393,7 @@ A single-stage build puts everything in the final image:
 
 This results in a bloated, insecure image. You need dev tools to **build**, but not to **run**.
 
-> Like cooking — you use pots, pans, and prep tools to make a dish, but you don't serve the meal with all the dirty dishes on the plate.
+> Like cooking - you use pots, pans, and prep tools to make a dish, but you don't serve the meal with all the dirty dishes on the plate.
 
 ### The Solution: Multi-Stage Builds
 
@@ -416,7 +416,7 @@ COPY prisma ./prisma
 # Install ALL dependencies (including dev deps for build)
 RUN npm install
 
-# Generate Prisma client (reads schema.prisma — no DB needed!)
+# Generate Prisma client (reads schema.prisma - no DB needed!)
 RUN npx prisma generate
 
 # Copy source code
@@ -445,7 +445,7 @@ COPY --from=builder /app/src/generated ./src/generated
 
 EXPOSE 4000
 
-# Run node directly — no npm overhead, proper signal handling
+# Run node directly - no npm overhead, proper signal handling
 CMD ["node", "dist/server.js"]
 ```
 
@@ -455,8 +455,8 @@ CMD ["node", "dist/server.js"]
 |---|---|
 | `AS builder` | Names the stage so we can reference it later |
 | `npm install` in Stage 1 | Need TypeScript + all dev deps to compile |
-| `npx prisma generate` before build | Generates TS types — needed for `tsc` to compile |
-| `npm install --omit=dev` in Stage 2 | Production only — no TypeScript, no nodemon |
+| `npx prisma generate` before build | Generates TS types - needed for `tsc` to compile |
+| `npm install --omit=dev` in Stage 2 | Production only - no TypeScript, no nodemon |
 | `COPY --from=builder` | Cherry-pick only what we need from Stage 1 |
 | `node dist/server.js` not `npm start` | Direct node = no extra process, proper signal handling |
 
@@ -486,18 +486,18 @@ Volumes provide **persistent storage** for containers. Without volumes, all data
 
 ### Types of Volumes
 
-**Named Volume** — managed by Docker, stored in Docker's area:
+**Named Volume** - managed by Docker, stored in Docker's area:
 ```bash
 docker volume create pgdata
 docker run -v pgdata:/var/lib/postgresql/data postgres
 ```
 
-**Bind Mount** — maps a host path to a container path:
+**Bind Mount** - maps a host path to a container path:
 ```bash
 docker run -v $(pwd):/app my-app   # your local folder → /app in container
 ```
 
-**Anonymous Volume** — no name, protects a specific path from being overwritten:
+**Anonymous Volume** - no name, protects a specific path from being overwritten:
 ```bash
 docker run -v /app/node_modules my-app   # protects node_modules
 ```
@@ -512,13 +512,13 @@ docker volume rm <name>           # remove a volume
 docker volume prune               # delete all unused volumes
 ```
 
-> ⚠️ `docker volume prune` and `docker compose down -v` delete data permanently — use with caution in production!
+> ⚠️ `docker volume prune` and `docker compose down -v` delete data permanently - use with caution in production!
 
 ---
 
 ## Networks
 
-By default, containers are **isolated** — they can't talk to each other. Docker Networks put containers in the same "room" so they can communicate.
+By default, containers are **isolated** - they can't talk to each other. Docker Networks put containers in the same "room" so they can communicate.
 
 ### Why Networks Matter
 
@@ -643,14 +643,14 @@ docker volume prune
 
 ## Dev Containers
 
-A **Dev Container** is a Docker container used as a full development environment — your code, tools, extensions, and runtime all inside a container.
+A **Dev Container** is a Docker container used as a full development environment - your code, tools, extensions, and runtime all inside a container.
 
 ### Why Dev Containers?
 
 - Every team member has the **identical** development environment
 - No "works on my machine" issues
-- New developers onboard in minutes — just open the container
-- Keeps your host machine clean — no global installs
+- New developers onboard in minutes - just open the container
+- Keeps your host machine clean - no global installs
 
 ### How It Works
 
