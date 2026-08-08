@@ -1,6 +1,6 @@
-# 04 — Namespaces
+# 04 - Namespaces
 
-A complete beginner-friendly guide to Kubernetes Namespaces — how to organize, isolate, and manage resources inside your cluster.
+A complete beginner-friendly guide to Kubernetes Namespaces - how to organize, isolate, and manage resources inside your cluster.
 
 ---
 
@@ -26,15 +26,15 @@ A complete beginner-friendly guide to Kubernetes Namespaces — how to organize,
 
 A **Namespace** is a virtual cluster inside your physical Kubernetes cluster. Think of it as a **folder** that groups and isolates related resources.
 
-Simple analogy — think of a Namespace like **floors in a building**:
+Simple analogy - think of a Namespace like **floors in a building**:
 
 ```
 🏢 Building (Kubernetes Cluster)
-├── Floor 1 — default        ← resources with no specific floor
-├── Floor 2 — kube-system    ← building management (don't touch!)
-├── Floor 3 — production     ← live apps
-├── Floor 4 — staging        ← testing before going live
-└── Floor 5 — monitoring     ← dashboards and alerts
+├── Floor 1 - default        ← resources with no specific floor
+├── Floor 2 - kube-system    ← building management (don't touch!)
+├── Floor 3 - production     ← live apps
+├── Floor 4 - staging        ← testing before going live
+└── Floor 5 - monitoring     ← dashboards and alerts
 ```
 
 Each floor is completely separate:
@@ -46,7 +46,7 @@ Each floor is completely separate:
 
 ## Why Namespaces Exist
 
-Without namespaces — everything in one big pile:
+Without namespaces - everything in one big pile:
 
 ```
 ❌ Without namespaces:
@@ -60,12 +60,12 @@ Cluster
 ```
 
 Problems:
-- **Name conflicts** — two teams can't both create a resource called `backend`
-- **No isolation** — Team A can accidentally delete Team B's resources
-- **No permissions** — can't give Team A access to only their resources
-- **No organization** — 100 resources with no grouping = chaos
+- **Name conflicts** - two teams can't both create a resource called `backend`
+- **No isolation** - Team A can accidentally delete Team B's resources
+- **No permissions** - can't give Team A access to only their resources
+- **No organization** - 100 resources with no grouping = chaos
 
-With namespaces — everything organized:
+With namespaces - everything organized:
 
 ```
 ✅ With namespaces:
@@ -106,7 +106,7 @@ Where your resources go when you don't specify a namespace:
 kubectl run my-pod --image=nginx   # goes to default namespace
 ```
 
-> In production — NEVER use default. Always create dedicated namespaces. default is fine for quick learning and experiments.
+> In production - NEVER use default. Always create dedicated namespaces. default is fine for quick learning and experiments.
 
 ### kube-system
 
@@ -126,7 +126,7 @@ kube-scheduler-docker-desktop     1/1     Running  ← scheduler
 kube-proxy-m5cnx                  1/1     Running  ← networking
 ```
 
-> Never deploy your apps to kube-system. Never delete or modify resources here. This is the engine room — breaking it breaks the entire cluster.
+> Never deploy your apps to kube-system. Never delete or modify resources here. This is the engine room - breaking it breaks the entire cluster.
 
 ### kube-public
 
@@ -134,7 +134,7 @@ Readable by everyone, including unauthenticated users. Rarely used in practice. 
 
 ### kube-node-lease
 
-Used internally by Kubernetes for node heartbeats — checking if nodes are alive. You will never need to touch this.
+Used internally by Kubernetes for node heartbeats - checking if nodes are alive. You will never need to touch this.
 
 ---
 
@@ -144,11 +144,11 @@ Let's understand what's running inside kube-system in detail:
 
 | Pod | What it does |
 |-----|-------------|
-| kube-apiserver | The brain — all kubectl commands go here first |
-| etcd | The database — stores ALL cluster state (pods, services, configs) |
+| kube-apiserver | The brain - all kubectl commands go here first |
+| etcd | The database - stores ALL cluster state (pods, services, configs) |
 | kube-scheduler | Decides which Node a new Pod should run on |
 | kube-controller-manager | Watches cluster state, fixes drift (e.g. restarts crashed pods) |
-| coredns | DNS server — how Pods find each other by name |
+| coredns | DNS server - how Pods find each other by name |
 | kube-proxy | Handles networking between Pods across nodes |
 | storage-provisioner | Manages storage volumes |
 
@@ -161,13 +161,13 @@ Think of kube-system like the **IT department of a company**:
 
 ## Creating Namespaces
 
-### Method 1 — Command line (quick)
+### Method 1 - Command line (quick)
 
 ```bash
 kubectl create namespace my-namespace
 ```
 
-### Method 2 — YAML file (recommended for production)
+### Method 2 - YAML file (recommended for production)
 
 ```yaml
 apiVersion: v1
@@ -205,7 +205,7 @@ kubectl get ns
 
 ### Adding a Pod to a namespace
 
-Option A — Specify in YAML (recommended):
+Option A - Specify in YAML (recommended):
 
 ```yaml
 apiVersion: v1
@@ -221,7 +221,7 @@ spec:
       image: nginx:alpine
 ```
 
-Option B — Specify with kubectl flag:
+Option B - Specify with kubectl flag:
 
 ```bash
 kubectl run my-pod --image=nginx -n my-namespace
@@ -275,7 +275,7 @@ kubectl config view --minify | grep namespace
 
 ## Resource Isolation
 
-Namespaces provide **soft isolation** — they separate resources logically but don't provide network isolation by default.
+Namespaces provide **soft isolation** - they separate resources logically but don't provide network isolation by default.
 
 ### What IS isolated per namespace
 
@@ -312,7 +312,7 @@ spec:
       - podSelector: {}
 ```
 
-This blocks all incoming traffic from other namespaces — only Pods within production can talk to each other.
+This blocks all incoming traffic from other namespaces - only Pods within production can talk to each other.
 
 ---
 
@@ -367,7 +367,7 @@ requests.cpu     250m   2
 requests.memory  128Mi  4Gi
 ```
 
-### LimitRange — default limits per Pod
+### LimitRange - default limits per Pod
 
 ResourceQuota limits the whole namespace. LimitRange sets default limits for each Pod:
 
@@ -414,10 +414,10 @@ namespace: frontend
 In the frontend Pod environment variables:
 
 ```bash
-# Wrong — only works within same namespace
+# Wrong - only works within same namespace
 API_URL=http://api-service:9000
 
-# Correct — full DNS name for cross-namespace
+# Correct - full DNS name for cross-namespace
 API_URL=http://api-service.backend.svc.cluster.local:9000
 ```
 
@@ -438,21 +438,21 @@ wget -qO- http://api-service.backend.svc.cluster.local:9000
 ### 1. Never use default in production
 
 ```bash
-# Bad — everything in default
+# Bad - everything in default
 kubectl apply -f deployment.yaml
 
-# Good — always specify namespace
+# Good - always specify namespace
 kubectl apply -f deployment.yaml -n production
 ```
 
 ### 2. Use meaningful names
 
 ```bash
-# Bad — vague names
+# Bad - vague names
 kubectl create namespace ns1
 kubectl create namespace test
 
-# Good — descriptive names
+# Good - descriptive names
 kubectl create namespace production
 kubectl create namespace staging
 kubectl create namespace monitoring
@@ -524,7 +524,7 @@ Labels help with filtering, monitoring, and cost tracking.
 
 ## Real World Example
 
-Here is how to structure namespaces for **Atlas Edu** — a school management SaaS:
+Here is how to structure namespaces for **Atlas Edu** - a school management SaaS:
 
 ### Namespace structure
 
@@ -729,7 +729,7 @@ monitoring    → Prometheus, Grafana, alerting
 |---------|-----|
 | Using default in production | Always create dedicated namespaces |
 | Forgetting -n namespace in commands | Set default namespace with kubectl config set-context |
-| Deleting a namespace by accident | kubectl delete ns deletes EVERYTHING inside — be careful! |
+| Deleting a namespace by accident | kubectl delete ns deletes EVERYTHING inside - be careful! |
 | Pods can not find each other | Cross-namespace needs full DNS: service.namespace.svc.cluster.local |
 | No resource limits | Always add ResourceQuota to prevent runaway resource usage |
 | Vague namespace names | Use descriptive names: atlas-edu-production not prod |
