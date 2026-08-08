@@ -1,4 +1,4 @@
-# 3.2 — Git Branching
+# 3.2 - Git Branching
 
 Branches let you build features, fix bugs, and experiment **without breaking `main`**. This is the core of real team and DevOps workflows.
 
@@ -65,8 +65,8 @@ git switch -c feature-login       # create AND switch (recommended)
 git checkout -b feature-login     # older equivalent
 ```
 
-**`git switch`** — Change branches (modern).  
-**`git checkout -b`** — Older way; still common in docs.
+**`git switch`** - Change branches (modern).  
+**`git checkout -b`** - Older way; still common in docs.
 
 ### Switch branches
 
@@ -75,7 +75,7 @@ git switch main
 git switch feature-login
 ```
 
-If you have uncommitted changes that conflict with the other branch, Git will stop you — commit, stash, or discard first.
+If you have uncommitted changes that conflict with the other branch, Git will stop you - commit, stash, or discard first.
 
 ### Rename current branch
 
@@ -153,7 +153,7 @@ main:     A ← B ← C ← D ← E ← M
 
 ### Fast-forward
 
-If `main` has no new commits since you branched, Git can just move the `main` pointer forward — **no merge commit**.
+If `main` has no new commits since you branched, Git can just move the `main` pointer forward - **no merge commit**.
 
 ```
 Before:  A ← B ← C          (main)
@@ -170,7 +170,7 @@ If both sides moved, or you force a merge commit:
 git merge --no-ff feature-login
 ```
 
-Creates an explicit merge commit — useful to mark “this PR landed.”
+Creates an explicit merge commit - useful to mark “this PR landed.”
 
 Many teams use **PR merge on GitHub**, which creates merge commits (or squash/rebase options).
 
@@ -213,7 +213,7 @@ If you already pushed and then rebase:
 git push --force-with-lease
 ```
 
-Use `--force-with-lease` (safer) — **not** bare `--force` — and **never** on `main`/`master` unless you really know why.
+Use `--force-with-lease` (safer) - **not** bare `--force` - and **never** on `main`/`master` unless you really know why.
 
 ---
 
@@ -244,7 +244,7 @@ git status
 # shows unmerged paths
 ```
 
-Open the file — you’ll see markers:
+Open the file - you’ll see markers:
 
 ```text
 <<<<<<< HEAD
@@ -256,7 +256,7 @@ incoming branch version
 
 ### Fix steps
 
-1. Edit the file — keep the correct final code  
+1. Edit the file - keep the correct final code  
 2. Remove all `<<<<<<<`, `=======`, `>>>>>>>` markers  
 3. Stage the fixed file  
 4. Continue
@@ -328,4 +328,4 @@ git remote prune origin                  # clean deleted remote branches
 
 ## Next
 
-Branches locally are not enough for teams — push them and review with Pull Requests → **[3.3-github.md](./3.3-github.md)**
+Branches locally are not enough for teams - push them and review with Pull Requests → **[3.3-github.md](./3.3-github.md)**

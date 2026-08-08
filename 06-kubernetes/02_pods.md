@@ -1,6 +1,6 @@
-# 02 — Pods
+# 02 - Pods
 
-A complete beginner-friendly guide to Pods — the smallest and most fundamental unit in Kubernetes.
+A complete beginner-friendly guide to Pods - the smallest and most fundamental unit in Kubernetes.
 
 ---
 
@@ -41,7 +41,7 @@ Container = Object / Instance
 Pod       = Object + networking + storage + metadata that K8s needs
 ```
 
-Kubernetes cannot manage raw containers directly — it needs the extra information a Pod provides (IP address, storage, health checks, etc.) to do its job properly.
+Kubernetes cannot manage raw containers directly - it needs the extra information a Pod provides (IP address, storage, health checks, etc.) to do its job properly.
 
 ---
 
@@ -84,12 +84,12 @@ Pod
 
 ### Multi Container Pod (rare, specific use cases)
 
-Sometimes two containers need to work **very closely together** — sharing the same network and storage. In that case, put them in the same Pod:
+Sometimes two containers need to work **very closely together** - sharing the same network and storage. In that case, put them in the same Pod:
 
 ```
 Pod
 ├── Main container (your app)
-└── Sidecar container (helper — logging, proxy, sync)
+└── Sidecar container (helper - logging, proxy, sync)
 ```
 
 **Common sidecar patterns:**
@@ -166,7 +166,7 @@ Key-value tags attached to the Pod. Used by Services to find this Pod, and by yo
 ```yaml
 spec:
 ```
-The desired state — what you want Kubernetes to create.
+The desired state - what you want Kubernetes to create.
 
 ```yaml
   containers:
@@ -179,7 +179,7 @@ A list of containers. The `-` makes it a list item. `name` is the container name
       ports:
         - containerPort: 80
 ```
-Documents which port the container listens on. This is **metadata only** — it doesn't actually open the port. Opening happens through a Service.
+Documents which port the container listens on. This is **metadata only** - it doesn't actually open the port. Opening happens through a Service.
 
 ---
 
@@ -210,7 +210,7 @@ spec:
 
 ### Pod with Resource Limits
 
-Always set resource limits in production — prevents one Pod from consuming all server resources:
+Always set resource limits in production - prevents one Pod from consuming all server resources:
 
 ```yaml
 apiVersion: v1
@@ -258,7 +258,7 @@ spec:
 |--------|----------|
 | `Always` | Always pull from registry (even if exists locally) |
 | `IfNotPresent` | Pull only if not already on the Node |
-| `Never` | Never pull — use local image only |
+| `Never` | Never pull - use local image only |
 
 > Use `imagePullPolicy: Never` when practicing with local images in Docker Desktop.
 
@@ -307,7 +307,7 @@ Deleted
 5. Pod is removed from the cluster
 ```
 
-> **Important:** Pods are **ephemeral** — they're designed to be temporary. Don't store important data inside a Pod — use Volumes instead.
+> **Important:** Pods are **ephemeral** - they're designed to be temporary. Don't store important data inside a Pod - use Volumes instead.
 
 ---
 
@@ -322,7 +322,7 @@ Deleted
 | `CrashLoopBackOff` | Keeps crashing and restarting | Check logs, fix your app |
 | `ImagePullBackOff` | Can't pull Docker image | Check image name, registry access |
 | `ErrImagePull` | Image pull failed | Same as above |
-| `Terminating` | Being deleted | Normal — wait for it |
+| `Terminating` | Being deleted | Normal - wait for it |
 | `OOMKilled` | Ran out of memory | Increase memory limits |
 | `ContainerCreating` | Image pulling, starting | Wait a moment |
 
@@ -362,7 +362,7 @@ spec:
   selector:
     app: atlas-edu    # finds ALL pods with this label
 
-# If a Pod crashes and restarts — new Pod still has the same label
+# If a Pod crashes and restarts - new Pod still has the same label
 # Service automatically finds it ✅
 ```
 
@@ -403,11 +403,11 @@ metadata:
 
 ## Namespaces & Pods
 
-Every Pod lives in a namespace. If you don't specify one — it goes to `default`.
+Every Pod lives in a namespace. If you don't specify one - it goes to `default`.
 
 ### Create a Pod in a specific namespace
 
-**Step 1 — Create the namespace:**
+**Step 1 - Create the namespace:**
 ```bash
 kubectl create namespace my-app
 ```
@@ -420,7 +420,7 @@ metadata:
   name: my-app
 ```
 
-**Step 2 — Add namespace to Pod YAML:**
+**Step 2 - Add namespace to Pod YAML:**
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -435,12 +435,12 @@ spec:
       image: node:22-alpine
 ```
 
-**Step 3 — Apply:**
+**Step 3 - Apply:**
 ```bash
 kubectl apply -f pod.yaml
 ```
 
-**Step 4 — Check it:**
+**Step 4 - Check it:**
 ```bash
 kubectl get pods -n my-app
 ```
@@ -451,13 +451,13 @@ kubectl get pods -n my-app
 
 Pods have an internal IP (`10.x.x.x`) that's only reachable **inside the cluster**. To access from outside you have two options:
 
-### Option 1 — Port Forward (dev/debugging only)
+### Option 1 - Port Forward (dev/debugging only)
 
 ```bash
 # Forward to the Pod directly
 kubectl port-forward pod/my-pod 8080:80
 
-# Forward to a Service (better — handles Pod restarts)
+# Forward to a Service (better - handles Pod restarts)
 kubectl port-forward service/my-service 8080:80 -n my-namespace
 ```
 
@@ -470,7 +470,7 @@ Your Mac → kubectl tunnel → Pod inside cluster
 
 Stops when you press `Ctrl+C`. Not for production.
 
-### Option 2 — Create a Service (production way)
+### Option 2 - Create a Service (production way)
 
 ```yaml
 apiVersion: v1
@@ -509,9 +509,9 @@ curl localhost:3000  # test your app internally
 
 ## Debugging Pods
 
-When something goes wrong — here's the debugging workflow:
+When something goes wrong - here's the debugging workflow:
 
-### Step 1 — Check Pod status
+### Step 1 - Check Pod status
 
 ```bash
 kubectl get pods -n <namespace>
@@ -519,13 +519,13 @@ kubectl get pods -n <namespace>
 
 Look at `STATUS` and `RESTARTS` columns.
 
-### Step 2 — Describe the Pod
+### Step 2 - Describe the Pod
 
 ```bash
 kubectl describe pod <pod-name> -n <namespace>
 ```
 
-Always scroll to the **Events** section at the bottom — this is where Kubernetes tells you exactly what went wrong:
+Always scroll to the **Events** section at the bottom - this is where Kubernetes tells you exactly what went wrong:
 
 ```
 Events:
@@ -533,7 +533,7 @@ Events:
   Warning  Failed   CrashLoopBackOff: Back-off restarting failed container
 ```
 
-### Step 3 — Check logs
+### Step 3 - Check logs
 
 ```bash
 kubectl logs <pod-name>                    # current logs
@@ -542,7 +542,7 @@ kubectl logs <pod-name> --previous         # logs from crashed container
 kubectl logs <pod-name> -c <container>     # specific container in multi-container pod
 ```
 
-### Step 4 — Shell into the Pod
+### Step 4 - Shell into the Pod
 
 ```bash
 kubectl exec -it <pod-name> -- sh
@@ -550,10 +550,10 @@ kubectl exec -it <pod-name> -- sh
 
 Check env vars, files, network connectivity from inside.
 
-### Step 5 — Run a temporary debug Pod
+### Step 5 - Run a temporary debug Pod
 
 ```bash
-# Busybox — lightweight debug pod
+# Busybox - lightweight debug pod
 kubectl run debug --rm -it --image=busybox -- sh
 
 # Once inside, test connectivity to other pods
@@ -589,7 +589,7 @@ Pod runs ✅
       ↓
 Pod crashes ❌
       ↓
-Nobody restarts it — it stays dead 💀
+Nobody restarts it - it stays dead 💀
 ```
 
 A **Deployment** manages Pods for you:
@@ -611,7 +611,7 @@ Deployment detects it → creates a new Pod automatically ✅
 ✅ Deployment: scaling ✅, rolling updates ✅, self-healing ✅, rollback ✅
 ```
 
-> Think of a raw Pod like a single employee with no manager — if they quit, the work stops. A Deployment is the manager that always ensures the right number of employees are working.
+> Think of a raw Pod like a single employee with no manager - if they quit, the work stops. A Deployment is the manager that always ensures the right number of employees are working.
 
 ---
 
@@ -735,9 +735,9 @@ spec:
 Running          → ✅ healthy
 Pending          → ⏳ waiting for scheduling
 Completed        → ✅ one-off task finished
-CrashLoopBackOff → ❌ app crashing — check logs
-ImagePullBackOff → ❌ can't pull image — check name
-OOMKilled        → ❌ out of memory — increase limits
+CrashLoopBackOff → ❌ app crashing - check logs
+ImagePullBackOff → ❌ can't pull image - check name
+OOMKilled        → ❌ out of memory - increase limits
 Terminating      → 🔄 being deleted
 ```
 

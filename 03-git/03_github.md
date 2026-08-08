@@ -1,4 +1,4 @@
-# 3.3 — GitHub
+# 3.3 - GitHub
 
 GitHub hosts your Git remotes and adds collaboration: Pull Requests, Issues, protections, and CI triggers. This guide connects local Git to real team workflows.
 
@@ -108,7 +108,7 @@ Host github.com
 
 1. **New repository**
 2. Name it, choose Public/Private
-3. Don’t add README if you already have a local project (avoids merge conflict on first push) — or do add it if starting empty on GitHub only
+3. Don’t add README if you already have a local project (avoids merge conflict on first push) - or do add it if starting empty on GitHub only
 
 ### From an existing local project
 
@@ -164,21 +164,21 @@ git remote remove origin
 
 ## Fetch, Pull, Push
 
-**`git fetch`** — Download new commits from remote **without** changing your files. Safe preview.
+**`git fetch`** - Download new commits from remote **without** changing your files. Safe preview.
 
 ```bash
 git fetch origin
 git log HEAD..origin/main --oneline    # what’s new on remote?
 ```
 
-**`git pull`** — `fetch` + integrate into your current branch (merge or rebase, depending on config).
+**`git pull`** - `fetch` + integrate into your current branch (merge or rebase, depending on config).
 
 ```bash
 git pull
 git pull origin main
 ```
 
-**`git push`** — Upload your commits to the remote.
+**`git push`** - Upload your commits to the remote.
 
 ```bash
 git push
@@ -246,8 +246,8 @@ On GitHub: **Compare & pull request**
 
 Write:
 
-- **Title** — clear, like a good commit message  
-- **Description** — what / why / how to test  
+- **Title** - clear, like a good commit message  
+- **Description** - what / why / how to test  
 - Link Issues if any (`Fixes #12`)
 
 ### Merge options on GitHub
@@ -321,7 +321,7 @@ Useful habits:
 - Labels: `bug`, `enhancement`, `docs`  
 - Close via PR description: `Fixes #42` / `Closes #42`
 
-You don’t need full project boards to be effective — Issues + PRs are enough to start.
+You don’t need full project boards to be effective - Issues + PRs are enough to start.
 
 ---
 

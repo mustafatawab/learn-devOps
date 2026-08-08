@@ -1,6 +1,6 @@
-# 3.4 — Git Advanced
+# 3.4 - Git Advanced
 
-Recovery, cleanup, and pro workflows — the skills that separate “I use Git” from “I trust Git in production.”
+Recovery, cleanup, and pro workflows - the skills that separate “I use Git” from “I trust Git in production.”
 
 ---
 
@@ -8,9 +8,9 @@ Recovery, cleanup, and pro workflows — the skills that separate “I use Git�
 
 1. [Stash](#stash)
 2. [Undo & Recover (Decision Guide)](#undo--recover-decision-guide)
-3. [Reset — Soft, Mixed, Hard](#reset--soft-mixed-hard)
+3. [Reset - Soft, Mixed, Hard](#reset--soft-mixed-hard)
 4. [Revert (Safe for Shared History)](#revert-safe-for-shared-history)
-5. [Reflog — Your Safety Net](#reflog--your-safety-net)
+5. [Reflog - Your Safety Net](#reflog--your-safety-net)
 6. [Detached HEAD](#detached-head)
 7. [Cherry-pick](#cherry-pick)
 8. [Tags & Releases](#tags--releases)
@@ -45,7 +45,7 @@ Named stash:
 git stash push -m "wip: nginx config"
 ```
 
-> Stash is local only — it is **not** pushed to GitHub.
+> Stash is local only - it is **not** pushed to GitHub.
 
 ---
 
@@ -69,7 +69,7 @@ Only on your laptop / feature     →  reset / amend / rebase OK (with care)
 
 ---
 
-## Reset — Soft, Mixed, Hard
+## Reset - Soft, Mixed, Hard
 
 **`git reset`** moves the current branch pointer (and optionally staging/working tree).
 
@@ -118,9 +118,9 @@ A ← B ← C ← D ← R     (R undoes C)
 
 ---
 
-## Reflog — Your Safety Net
+## Reflog - Your Safety Net
 
-**Reflog** records where HEAD pointed locally — even after reset/rebase “lost” commits.
+**Reflog** records where HEAD pointed locally - even after reset/rebase “lost” commits.
 
 ```bash
 git reflog
@@ -158,7 +158,7 @@ git switch --detach a1b2c3d
 
 You’re viewing history. New commits here can get “lost” if you switch away without a branch.
 
-Fix — keep the work:
+Fix - keep the work:
 
 ```bash
 git switch -c hotfix-from-old-commit
@@ -193,7 +193,7 @@ Or abort: `git cherry-pick --abort`
 
 ## Tags & Releases
 
-**Tags** mark important points — usually versions.
+**Tags** mark important points - usually versions.
 
 ```bash
 git tag v1.0.0                        # lightweight
@@ -260,20 +260,20 @@ Common actions:
 
 ## Find Bugs: blame & bisect
 
-**`git blame`** — Who last changed each line?
+**`git blame`** - Who last changed each line?
 
 ```bash
 git blame path/to/file.py
 git blame -L 20,40 path/to/file.py
 ```
 
-**`git bisect`** — Binary search history to find the commit that introduced a bug.
+**`git bisect`** - Binary search history to find the commit that introduced a bug.
 
 ```bash
 git bisect start
 git bisect bad                # current commit is bad
 git bisect good v1.2.0        # known good tag/commit
-# Git checks out a midpoint — test your app
+# Git checks out a midpoint - test your app
 git bisect good               # or: git bisect bad
 # repeat until Git prints the first bad commit
 git bisect reset
@@ -294,7 +294,7 @@ git submodule update --init --recursive
 
 **Use when:** you truly need a separate repo pinned inside another (rare).
 
-**Avoid when:** a package manager (npm, pip, Go modules) or monorepo is enough — submodules confuse clones and CI.
+**Avoid when:** a package manager (npm, pip, Go modules) or monorepo is enough - submodules confuse clones and CI.
 
 Prefer documenting “don’t use submodules unless you must.”
 
@@ -311,7 +311,7 @@ git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true
 ```
 
-Or GPG keys — add the public key in GitHub **SSH and GPG keys**. Verified badges appear on commits/PRs.
+Or GPG keys - add the public key in GitHub **SSH and GPG keys**. Verified badges appear on commits/PRs.
 
 ---
 
@@ -321,9 +321,9 @@ Hooks are scripts Git runs on events (commit, push, etc.) in `.git/hooks/`.
 
 Examples:
 
-- `pre-commit` — lint / block secrets  
-- `commit-msg` — enforce message format  
-- `pre-push` — run tests  
+- `pre-commit` - lint / block secrets  
+- `commit-msg` - enforce message format  
+- `pre-push` - run tests  
 
 Teams often use **Husky**, **pre-commit** (Python framework), or CI instead of relying only on local hooks (hooks aren’t committed by default unless you use a shared tool).
 
@@ -334,7 +334,7 @@ Teams often use **Husky**, **pre-commit** (Python framework), or CI instead of r
 ### Good habits
 
 - Branch from latest `main`; open small PRs  
-- Never commit secrets — use `.gitignore` + secret scanning  
+- Never commit secrets - use `.gitignore` + secret scanning  
 - Prefer `revert` on shared branches  
 - Use `--force-with-lease` instead of `--force`  
 - Tag releases that get deployed  
@@ -358,7 +358,7 @@ echo ".env" >> .gitignore
 git commit -m "Stop tracking .env"
 ```
 
-If the secret was pushed: **rotate it** — history may still contain it until rewritten (advanced/filter tools) or treated as compromised.
+If the secret was pushed: **rotate it** - history may still contain it until rewritten (advanced/filter tools) or treated as compromised.
 
 ### Large files
 
@@ -404,9 +404,9 @@ Don’t commit big binaries/videos. Use Git LFS if needed, or store artifacts in
 
 You now have:
 
-1. **Basics** — snapshots and daily workflow  
-2. **Branching** — parallel work, merge/rebase, conflicts  
-3. **GitHub** — remotes, PRs, protection, CI entry point  
-4. **Advanced** — recover, clean history, ship safely  
+1. **Basics** - snapshots and daily workflow  
+2. **Branching** - parallel work, merge/rebase, conflicts  
+3. **GitHub** - remotes, PRs, protection, CI entry point  
+4. **Advanced** - recover, clean history, ship safely  
 
 Next learning step in the roadmap: **[04-containerization](../04-containerization/)** or jump to **[05-ci-cd](../05-ci-cd/)** to connect Git events to pipelines.

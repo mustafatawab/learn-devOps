@@ -1,6 +1,6 @@
-# 3.1 — Git Basics
+# 3.1 - Git Basics
 
-Learn Git from scratch — what it is, how to set it up, and the everyday commands you’ll use forever.
+Learn Git from scratch - what it is, how to set it up, and the everyday commands you’ll use forever.
 
 ---
 
@@ -59,7 +59,7 @@ Your laptop (Git)  ←→  GitHub (remote copy + collaboration tools)
 
 You can use Git without GitHub. You cannot get GitHub’s full value without Git.
 
-Other hosts exist (GitLab, Bitbucket) — same Git commands, different websites.
+Other hosts exist (GitLab, Bitbucket) - same Git commands, different websites.
 
 ---
 
@@ -81,7 +81,7 @@ Files you edit   →    Files marked "ready"  →  Saved commits
 | Area | Meaning |
 |------|---------|
 | **Working directory** | Files as you see them in the folder |
-| **Staging area** | The next commit “shopping cart” — what will be saved |
+| **Staging area** | The next commit “shopping cart” - what will be saved |
 | **Repository** | Permanent history of commits |
 
 ### Commit
@@ -98,7 +98,7 @@ A snapshot with:
 
 ### HEAD
 
-A pointer to “where you are now” — usually the tip of the current branch.
+A pointer to “where you are now” - usually the tip of the current branch.
 
 ---
 
@@ -168,7 +168,7 @@ git clone git@github.com:user/repo.git        # SSH
 cd repo
 ```
 
-**`git clone`** — Downloads the project **and** its full Git history, then sets `origin` as the remote.
+**`git clone`** - Downloads the project **and** its full Git history, then sets `origin` as the remote.
 
 ---
 
@@ -185,9 +185,9 @@ git commit -m "message"     # save a snapshot
 
 ### Step by step
 
-**1. `git status`** — Shows modified, staged, and untracked files. Run this often.
+**1. `git status`** - Shows modified, staged, and untracked files. Run this often.
 
-**2. `git add`** — Moves changes into the staging area.
+**2. `git add`** - Moves changes into the staging area.
 
 ```bash
 git add index.html
@@ -195,7 +195,7 @@ git add src/                # stage a folder
 git add -p                  # stage hunks interactively (advanced but useful)
 ```
 
-**3. `git commit`** — Saves the staged snapshot permanently in history.
+**3. `git commit`** - Saves the staged snapshot permanently in history.
 
 ```bash
 git commit -m "Add login form validation"
@@ -216,27 +216,27 @@ git commit --amend --no-edit     # keep same message
 git commit --amend -m "New msg"  # change message
 ```
 
-> **Rule:** Don’t amend commits that others already pulled — it rewrites history.
+> **Rule:** Don’t amend commits that others already pulled - it rewrites history.
 
 ---
 
 ## See What Changed
 
-**`git status`** — High-level: which files changed / staged.
+**`git status`** - High-level: which files changed / staged.
 
-**`git diff`** — Line-by-line changes **not yet staged**.
+**`git diff`** - Line-by-line changes **not yet staged**.
 
 ```bash
 git diff
 ```
 
-**`git diff --staged`** (or `--cached`) — Changes that **are** staged, ready to commit.
+**`git diff --staged`** (or `--cached`) - Changes that **are** staged, ready to commit.
 
 ```bash
 git diff --staged
 ```
 
-**`git log`** — Commit history.
+**`git log`** - Commit history.
 
 ```bash
 git log
@@ -246,7 +246,7 @@ git log -5                     # last 5 commits
 git log --author="Yasir"
 ```
 
-**`git show`** — Details of one commit (message + diff).
+**`git show`** - Details of one commit (message + diff).
 
 ```bash
 git show
@@ -310,7 +310,7 @@ __pycache__/
 .vscode/
 ```
 
-**`git check-ignore -v file`** — Explains why a file is ignored.
+**`git check-ignore -v file`** - Explains why a file is ignored.
 
 If you already committed a secret by mistake:
 
