@@ -1,6 +1,6 @@
-# 05 - Deployments
+# 05 — Deployments
 
-A complete beginner-friendly guide to Kubernetes Deployments - the most important object in Kubernetes for running production applications.
+A complete beginner-friendly guide to Kubernetes Deployments — the most important object in Kubernetes for running production applications.
 
 ---
 
@@ -17,7 +17,7 @@ A complete beginner-friendly guide to Kubernetes Deployments - the most importan
 9. [Deployment Strategies](#deployment-strategies)
 10. [Environment Variables in Deployments](#environment-variables-in-deployments)
 11. [Resource Limits in Deployments](#resource-limits-in-deployments)
-12. [Health Checks - Liveness & Readiness Probes](#health-checks--liveness--readiness-probes)
+12. [Health Checks — Liveness & Readiness Probes](#health-checks--liveness--readiness-probes)
 13. [Real World Example](#real-world-example)
 14. [Essential Deployment Commands](#essential-deployment-commands)
 15. [Quick Reference](#quick-reference)
@@ -26,7 +26,7 @@ A complete beginner-friendly guide to Kubernetes Deployments - the most importan
 
 ## What is a Deployment?
 
-A **Deployment** is a Kubernetes object that manages your Pods for you - creating them, keeping them healthy, scaling them up and down, and updating them safely.
+A **Deployment** is a Kubernetes object that manages your Pods for you — creating them, keeping them healthy, scaling them up and down, and updating them safely.
 
 Think of a Deployment like a **staffing agency**:
 
@@ -59,7 +59,7 @@ Pod is running ✅
       ↓
 Pod crashes for any reason ❌
       ↓
-Pod stays dead - nobody restarts it 💀
+Pod stays dead — nobody restarts it 💀
       ↓
 Your app is down until YOU manually intervene
 ```
@@ -77,7 +77,7 @@ Deployment detects it immediately
       ↓
 Deployment creates a new Pod automatically ✅
       ↓
-Your app is back up - you didn't do anything
+Your app is back up — you didn't do anything
 ```
 
 ### Side by side comparison
@@ -118,7 +118,7 @@ ReplicaSet → if a Pod dies, creates a new one immediately
 Deployment → handles updates by creating new ReplicaSets
 ```
 
-You almost never interact with ReplicaSets directly - the Deployment handles them automatically. But it's good to know they exist.
+You almost never interact with ReplicaSets directly — the Deployment handles them automatically. But it's good to know they exist.
 
 ### The reconciliation loop
 
@@ -131,7 +131,7 @@ Every few seconds:
   Action:         "Create 1 more Pod"
 ```
 
-This is called the **reconciliation loop** - Kubernetes always tries to match actual state to desired state. This is why Kubernetes is called "self-healing".
+This is called the **reconciliation loop** — Kubernetes always tries to match actual state to desired state. This is why Kubernetes is called "self-healing".
 
 ---
 
@@ -152,7 +152,7 @@ spec:
   selector:
     matchLabels:
       app: nginx         # which Pods this Deployment manages
-  template:              # Pod template - defines what each Pod looks like
+  template:              # Pod template — defines what each Pod looks like
     metadata:
       labels:
         app: nginx       # must match selector.matchLabels above!
@@ -178,9 +178,9 @@ apiVersion: apps/v1   # Deployments, StatefulSets, DaemonSets
 
 How many Pod copies to run simultaneously:
 ```yaml
-replicas: 1   # one Pod - single instance
-replicas: 3   # three Pods - load balanced
-replicas: 0   # zero Pods - app is "paused"
+replicas: 1   # one Pod — single instance
+replicas: 3   # three Pods — load balanced
+replicas: 0   # zero Pods — app is "paused"
 ```
 
 **`spec.selector.matchLabels`**
@@ -272,7 +272,7 @@ ReplicaSet name:   nginx-deployment-7d8f9b        (deployment + hash)
 Pod names:         nginx-deployment-7d8f9b-abc12  (replicaset + random)
 ```
 
-The hash (`7d8f9b`) changes every time the Pod template changes - this is how Kubernetes tracks different versions of your Deployment.
+The hash (`7d8f9b`) changes every time the Pod template changes — this is how Kubernetes tracks different versions of your Deployment.
 
 ---
 
@@ -280,13 +280,13 @@ The hash (`7d8f9b`) changes every time the Pod template changes - this is how Ku
 
 Scaling means changing the number of Pod replicas running.
 
-### Scale up - more replicas
+### Scale up — more replicas
 
 ```bash
 # Imperative (quick)
 kubectl scale deployment nginx-deployment --replicas=5 -n my-app
 
-# Declarative (recommended - update YAML and apply)
+# Declarative (recommended — update YAML and apply)
 # Edit deployment.yaml: replicas: 5
 kubectl apply -f deployment.yaml
 ```
@@ -298,7 +298,7 @@ Scale to 5
 After:  5 Pods running (2 new Pods created automatically) ✅
 ```
 
-### Scale down - fewer replicas
+### Scale down — fewer replicas
 
 ```bash
 kubectl scale deployment nginx-deployment --replicas=2 -n my-app
@@ -311,7 +311,7 @@ Scale to 2
 After:  2 Pods running (3 Pods gracefully terminated) ✅
 ```
 
-### Scale to zero - pause the app
+### Scale to zero — pause the app
 
 ```bash
 kubectl scale deployment nginx-deployment --replicas=0 -n my-app
@@ -320,8 +320,8 @@ kubectl scale deployment nginx-deployment --replicas=0 -n my-app
 All Pods are removed but the Deployment still exists. Useful for saving resources in staging environments overnight.
 
 ```
-replicas: 0 → app is "paused" - no Pods, no traffic served
-replicas: 3 → app is "running" - 3 Pods serving traffic
+replicas: 0 → app is "paused" — no Pods, no traffic served
+replicas: 3 → app is "running" — 3 Pods serving traffic
 ```
 
 ### Verify scaling
@@ -335,7 +335,7 @@ kubectl get deployment nginx-deployment -n my-app  # see READY count
 
 ## Rolling Updates
 
-A rolling update replaces old Pods with new ones **gradually** - ensuring zero downtime.
+A rolling update replaces old Pods with new ones **gradually** — ensuring zero downtime.
 
 ### How rolling updates work
 
@@ -360,12 +360,18 @@ Step 4: Pod-2 ready, update Pod-3
 
 Step 5: Done!
   Pod-1 (v2) ✅     Pod-2 (v2) ✅     Pod-3 (v2) ✅
-  All traffic on v2 - zero downtime throughout 🎉
+  All traffic on v2 — zero downtime throughout 🎉
 ```
 
 ### Triggering a rolling update
 
-A rolling update is triggered whenever the **Pod template** changes - most commonly when you update the image:
+A rolling update is triggered whenever the **Pod template** changes — most commonly when you update the image:
+
+> ⚠️ **Common mistake:** The container name in `set image` must match exactly what's in your Deployment. Always check the exact name first:
+> ```bash
+> kubectl describe deployment <name> -n <namespace> | grep -A5 "Containers:"
+> ```
+> If you get `error: unable to find container named "nginx"` — the name in your YAML doesn't match what you typed.
 
 ```bash
 # Update image version
@@ -408,13 +414,13 @@ spec:
       maxSurge: 1          # max extra Pods that can be created during update
 ```
 
-**`maxUnavailable: 1`** - at most 1 Pod can be down at any time:
+**`maxUnavailable: 1`** — at most 1 Pod can be down at any time:
 ```
 3 Pods total, maxUnavailable: 1
 → At least 2 Pods always serving traffic ✅
 ```
 
-**`maxSurge: 1`** - at most 1 extra Pod can be created during update:
+**`maxSurge: 1`** — at most 1 extra Pod can be created during update:
 ```
 3 Pods total, maxSurge: 1
 → Maximum 4 Pods exist at once during the update
@@ -450,6 +456,15 @@ kubectl rollout undo deployment/nginx-deployment -n my-app
 kubectl rollout undo deployment/nginx-deployment --to-revision=1 -n my-app
 ```
 
+> ⚠️ **Important:** Rollback does NOT go backwards in revision history. It creates a **new revision** with the old configuration. Revision numbers always increase — never decrease.
+>
+> ```
+> Before rollback:  REVISION 1, 2, 3 (current)
+> After rollback:   REVISION 1, 2, 3, 4 (new revision with config from rev 2)
+> ```
+>
+> This means `kubectl rollout history` will always show you moving forward — even when rolling back.
+
 ### Adding change annotations
 
 To make rollout history useful, annotate your changes:
@@ -483,7 +498,7 @@ Kubernetes supports two built-in update strategies:
 
 ### 1. RollingUpdate (default)
 
-Replaces Pods gradually - zero downtime:
+Replaces Pods gradually — zero downtime:
 
 ```yaml
 spec:
@@ -603,7 +618,7 @@ envFrom:
       name: db-secret
 ```
 
-### Combined - ConfigMap + Secret
+### Combined — ConfigMap + Secret
 
 ```yaml
 envFrom:
@@ -619,7 +634,7 @@ See `06_configmaps_secrets.md` for a full guide on ConfigMaps and Secrets.
 
 ## Resource Limits in Deployments
 
-Always set resource requests and limits in production - prevents one Pod from starving others:
+Always set resource requests and limits in production — prevents one Pod from starving others:
 
 ```yaml
 spec:
@@ -650,7 +665,7 @@ spec:
 
 ```
 Ki = Kibibyte (1024 bytes)
-Mi = Mebibyte (1024 Ki) - use this for RAM
+Mi = Mebibyte (1024 Ki) — use this for RAM
 Gi = Gibibyte (1024 Mi)
 
 128Mi = 128 megabytes
@@ -675,11 +690,11 @@ Limits set:
 
 ---
 
-## Health Checks - Liveness & Readiness Probes
+## Health Checks — Liveness & Readiness Probes
 
-Kubernetes needs to know if your app is actually working - not just running. Probes let you tell Kubernetes how to check.
+Kubernetes needs to know if your app is actually working — not just running. Probes let you tell Kubernetes how to check.
 
-### Liveness Probe - is the app alive?
+### Liveness Probe — is the app alive?
 
 Checks if your app is still alive. If the probe fails, Kubernetes **restarts the container**:
 
@@ -701,7 +716,7 @@ App starts → wait 30 seconds → check /health every 10s
 /health fails 3 times ❌ → container restarted automatically
 ```
 
-### Readiness Probe - is the app ready for traffic?
+### Readiness Probe — is the app ready for traffic?
 
 Checks if your app is ready to receive traffic. If the probe fails, Kubernetes **stops sending traffic** to this Pod (but does NOT restart it):
 
@@ -731,7 +746,7 @@ New Pod starts
 | On failure | Container restarts | Pod removed from Service (no traffic) |
 | Use case | Detect hung/stuck apps | Prevent traffic during startup |
 
-### Startup Probe - slow starting apps
+### Startup Probe — slow starting apps
 
 For apps that take a long time to start:
 
@@ -750,18 +765,18 @@ During startup, liveness/readiness probes are paused until startup probe succeed
 ### Simple probe types
 
 ```yaml
-# HTTP probe - most common
+# HTTP probe — most common
 livenessProbe:
   httpGet:
     path: /health
     port: 3000
 
-# TCP probe - just checks if port is open
+# TCP probe — just checks if port is open
 livenessProbe:
   tcpSocket:
     port: 3000
 
-# Exec probe - runs a command inside container
+# Exec probe — runs a command inside container
 livenessProbe:
   exec:
     command:
@@ -773,7 +788,7 @@ livenessProbe:
 
 ## Real World Example
 
-Here is a complete production-ready Deployment for the **Atlas Edu API** - a Node.js/Express backend:
+Here is a complete production-ready Deployment for the **Atlas Edu API** — a Node.js/Express backend:
 
 ```yaml
 apiVersion: apps/v1
